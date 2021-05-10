@@ -9,5 +9,7 @@ numpy==1.16.4
 packaging==17.1
 pandas==1.0.3
 nbformat==4.4.0
-scikit_learn==0.24.2
-tensorflow==2.4.1
+#scikit_learn==0.24.2
+#tensorflow==2.1.1
+hyperas
+tornado==5.1.1
