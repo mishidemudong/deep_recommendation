@@ -5,13 +5,16 @@ Created on Fri May 14 10:57:42 2021
 
 @author: liang
 """
+import pandas as pd
 
 def get_item_data(itemid_list):
     
-    itemdata = []
+    itemdf = pd.DataFrame()
+    itemdf['item_id'] = itemid_list
+
     
     
-    return itemdata
+    return itemdf
     
     
     

@@ -12,7 +12,8 @@ import keras
 from deepctr.models import AFM, DeepFM, WDL, xDeepFM, DSIN
 from deepctr.feature_column import SparseFeat,get_feature_names
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
-
+import random
+import pandas as pd
 import json
 
 class RecPredictHandler():
@@ -82,16 +83,20 @@ class RecPredictHandler():
     
 
     def predict(self, pred_data):
-        res = {}
+        res = {'user_id': pred_data['user_id'][0]}
         
         with self.session.graph.as_default():
             with self.session.as_default():
-                
-                res['user_id'] = pred_data['user_id']
-                test_model_input = self.preprocess(pred_data['item_id'])
+                test_model_input = self.preprocess(pred_data)
                 pred = self.model.predict(test_model_input, batch_size=256)
-                res['result'] = [(it_id, score) for it_id, score in zip(pred_data['item_id'], pred)]
+                res['result'] = [(it_id, score[1]) for it_id, score in zip(pred_data['item_id'], pred)]
                 
+        return res
+
+    def predict_test(self, pred_data):
+        res = {'user_id': pred_data['user_id'][0]}
+        res['result'] = [(it_id, random.random()) for it_id in pred_data['item_id']]
+
         return res
 
 
@@ -101,11 +106,12 @@ if __name__ == '__main__':
     
     
     config_path = ''
-    chatbot = RecPredictHandler(config_path)
+    rec_object = RecPredictHandler(config_path)
     
+    item_list = ['i_001','i_002','i_003']
+    pred_df = pd.DataFrame()
+    pred_df['user_id'] = ['0001'] * len(item_list)
+    pred_df['item_id'] = item_list
     
-    pred =  {"profile": {}, "subtrack": "knowledge", "goal": [["START", "海清", "北京遇上西雅图"], ["北京遇上西雅图", "主演", "海清"]], "situation": "", "knowledge": [["海清", "评论", "长 得 有点像 刘若英 和 徐静蕾 的 合体"], ["海清", "毕业 院校", "北京电影学院 表演系"], ["海清", "出生 日期", "1978 - 1 - 12"], ["海清", "性别", "女"], ["海清", "职业", "演员"], ["海清", "领域", "明星"], ["海清", "代表作", "北京遇上西雅图"], ["北京遇上西雅图", "获奖", "香港电影金像奖 _ ( 2014 ； 第33届 ) _ 提名 _ 金像奖 - 最佳女主角 _ 汤唯 Wei Tang"], ["北京遇上西雅图", "主演", "海清"], ["北京遇上西雅图", "口碑", "口碑 一般"], ["北京遇上西雅图", "类型", "喜剧"], ["北京遇上西雅图", "领域", "电影"], ["海清", "评论", "中国 的 媳妇 专业户"], ["海清", "血型", "O型"], ["海清", "获奖", "北京遇上西雅图_提名 _ ( 2014 ； 第32届 ) _ 大众电影百花奖 _ 百花奖 - 最佳 女 配角"], ["海清", "描述", "美女"], ["海清", "描述", "女星"]], "history": ["说起 一位 女星 我 都会 竖起 大拇指 ， 很 欣赏 她 。", "你 说 的 是 哪位 美女 呢 ？", "看 过 双面胶 吗 ， 里面 的 女 主角 就是 海清 。", "牙齿 伶俐 ， 能说会道 的 一个人 。", "饰演 的 角色 都 有 一股 女 强人 的 味道 。", "确实 是 一个 好 演员 。"]}
-    
-    
-    result = chatbot.response(pred)
+    result = rec_object.predict_test(pred_df)
     print(result)

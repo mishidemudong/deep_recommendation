@@ -37,20 +37,20 @@ print("start conversation server success !")
 
 app = Flask(__name__)
 @app.route('/', methods=['POST', 'GET'])
-def extract():
+def rec_score_func():
 
     print(request.get_json())
     sample = request.get_json()
     
     #1 召回item_id 
-    itemid_list = get_itemidlist('all')
+    # itemid_list = get_itemidlist('all')
+    itemid_list = sample['item_list']
     #2 load user_data, item_data, interaction_data
     #  or load user_fea, item_data, interaction_fea
     pred_data = loadalldata(sample['user_id'], itemid_list)
-    
-    
+
     #3predict
-    response = rec_model.predict(pred_data)
+    response = rec_model.predict_test(pred_data)
 
     if response: 
         res = {
