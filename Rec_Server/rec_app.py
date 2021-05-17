@@ -36,7 +36,7 @@ print("start conversation server success !")
 
 
 app = Flask(__name__)
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/rec_score_predict', methods=['POST', 'GET'])
 def rec_score_func():
 
     print(request.get_json())
@@ -73,4 +73,4 @@ if __name__ == '__main__':
     print(("* Loading Keras model and Flask starting server..."
        "please wait until server has fully started"))
     
-    app.run(debug=False, host='0.0.0.0', port=8000)
+    app.run(debug=False, host='0.0.0.0', port=8008)
