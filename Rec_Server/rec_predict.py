@@ -23,24 +23,24 @@ class RecPredictHandler():
         self.session = keras.backend.get_session()
         
         if os.path.exists(config_path):
-            self.config = json.loads(open())
+            self.config = json.load(open(config_path,'r'))
             self.buildfeaturemodel()
-            self.buildmodel(self.config)
+            self.buildmodel()
         else:
             print('Build Handler Faild!!')
             
     def buildfeaturemodel(self):
 
-        self.sparse_feamodel = pickle.load(open(self.config['sparse_feamoel_path'], 'rb')) 
-        self.dense_feamodel = pickle.load(open(self.config['dense_feamoel_path'], 'rb')) 
+        self.fea_model = pickle.load(open(self.config['fea_model_path'], 'rb')) 
+#        self.dense_feamodel = pickle.load(open(self.fea_model['dense_feamoel_path'], 'rb')) 
         
         print("load fea_model success")
                 
     def buildmodel(self):
         
         if self.config['model_type'] == 'wdl':
-            self.model = WDL(self.config['linear_feature_columns'], self.config['dnn_feature_columns'],
-                            dnn_hidden_units=(self.config['dnn_him'], self.config['dnn_him']),
+            self.model = WDL(self.fea_model['linear_feature_columns'], self.fea_model['dnn_feature_columns'],
+                            dnn_hidden_units=(self.config['all_params']['dnn_him'], self.config['all_params']['dnn_him']),
                             l2_reg_linear=0.00001,
                             l2_reg_embedding=0.00001, 
                             l2_reg_dnn=0, seed=1024, dnn_dropout=0,
@@ -48,36 +48,35 @@ class RecPredictHandler():
                             )
             
         elif self.config['model_type'] == 'xdeepfm':
-            self.model = xDeepFM(self.config['linear_feature_columns'], self.config['dnn_feature_columns'], 
-                                dnn_hidden_units=(self.config['dnn_him'], self.config['dnn_him)']),
-                                cin_layer_size=(self.config['cin_size'], self.config['cin_size']), 
+            self.model = xDeepFM(self.fea_model['linear_feature_columns'], self.fea_model['dnn_feature_columns'], 
+                                dnn_hidden_units=(self.config['all_params']['dnn_him'], self.config['all_params']['dnn_him)']),
+                                cin_layer_size=(self.config['all_params']['cin_size'], self.config['all_params']['cin_size']), 
                                 cin_split_half=True, 
                                 cin_activation='relu', 
                                 l2_reg_linear=0.00001,
                                 l2_reg_embedding=0.00001, 
                                 l2_reg_dnn=0, l2_reg_cin=0, seed=1024, dnn_dropout=0,
                                 dnn_activation='relu', dnn_use_bn=False, task='binary')
-            
+        print("build model success")
         self.model.load_weights(self.config['saved_model_path'])
         print("load model success")
-        print("build model success")
 
     
     def preprocess(self, data):
         
         trans_data = {}
         
-        sparse_features = self.config['sparse_features']
-        dense_features = self.config['dense_features']
+        sparse_features = self.fea_model['sparse_features']
+        dense_features = self.fea_model['dense_features']
     
         trans_data[sparse_features] = data[sparse_features].fillna('-1', )
         trans_data[dense_features] = data[dense_features].fillna(0, )
     
         #
         for feat in sparse_features:
-            trans_data[feat] = self.sparse_feamodel[feat].transform(data[feat])
+            trans_data[feat] = self.fea_model['sparse_feamodel'][feat].transform(data[feat])
         
-        trans_data[dense_features] = self.dense_feamodel.transform(trans_data[dense_features])
+        trans_data[dense_features] = self.fea_model['dense_feamodel'].transform(trans_data[dense_features])
         
         return trans_data
     
@@ -105,7 +104,7 @@ class RecPredictHandler():
 if __name__ == '__main__':
     
     
-    config_path = ''
+    config_path = './recmodel/my_model_best_0.7408.json'
     rec_object = RecPredictHandler(config_path)
     
     item_list = ['i_001','i_002','i_003']
