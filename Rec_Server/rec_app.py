@@ -12,7 +12,7 @@ from flask_cors import CORS
 import tensorflow as tf
 import json
 from rec_predict import RecPredictHandler
-from recall_main import get_itemidlist
+# from recall_main import get_itemidlist
 from utils.load_fea_main import loadalldata
 
 
