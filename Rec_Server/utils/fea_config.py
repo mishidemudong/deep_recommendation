@@ -37,8 +37,11 @@ item_fea = {'物品ID': 'item_id',
              '三月内上涨下跌排名': '3Mtrendindex',
              '成分币种数量': 'compositionnum',
              '详情描述': 'description',
-             '评论内容': 'comment'        
+             '评论内容': 'comment',
+             '创建时间':'create_time'
         }
+item_table_name = ''
+
 
 user_fea = {
          '测试用户': 'if_test',
@@ -51,8 +54,11 @@ user_fea = {
          '30天手续费收入': '30days_fee',
          '最后一次交易时间间隔': 'interval_of_last_trade',
          '60天内交易次数': 'tradetimes_in_60days',
-         '60天内交易金额': 'trademoney_in_60days'
+         '60天内交易金额': 'trademoney_in_60days',
+         '创建时间':'create_time'
         }
+user_table_name = ''
+
 
 iteraction_fea = {
         '用户ID': 'user_id',
@@ -67,6 +73,7 @@ iteraction_fea = {
          '上次购买时间': 'lasttime_purchase_date',
          '上次卖出时间': 'lasttime_sold_date',
          '上次评论时间': 'lasttime_comment_date',
-         '评论内容': 'comment'
+         '评论内容': 'comment',
+         '创建时间':'create_time'
         }
-
+iteraction_table_name = ''

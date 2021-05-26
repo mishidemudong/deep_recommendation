@@ -1,4 +1,4 @@
-﻿字段名称,英文标识
+字段名称,英文标识
 用户ID,user_id
 物品ID,item_id
 交互类型,interaction_type
@@ -12,3 +12,4 @@
 上次卖出时间,lasttime_sold_date
 上次评论时间,lasttime_comment_date
 评论内容,comment
+创建时间,create_time
