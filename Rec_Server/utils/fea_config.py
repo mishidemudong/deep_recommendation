@@ -35,7 +35,7 @@ item_fea = {'物品ID': 'item_id',
         }
 
 user_fea = {
-        
+        111
         }
 
 iteraction_fea = {
