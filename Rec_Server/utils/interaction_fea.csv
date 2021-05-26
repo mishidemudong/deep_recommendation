@@ -1,0 +1,14 @@
+﻿字段名称,英文标识
+用户ID,user_id
+物品ID,item_id
+交互类型,interaction_type
+交互时间,interaction_time
+物品所在顺序,item_order_index
+历史点击次数,click_times
+历史购买次数,purchase_times
+历史交互记录,history_interaction_list
+上次点击时间,lasttime_click_date
+上次购买时间,lasttime_purchase_date
+上次卖出时间,lasttime_sold_date
+上次评论时间,lasttime_comment_date
+评论内容,comment
