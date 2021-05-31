@@ -13,7 +13,7 @@ def Merge(dict1, dict2):
     return res 
 
 
-item_fea_df = pd.read_csv('./item_map.csv')
+item_fea_df = pd.read_csv('../data/item_map.csv')
 item_fea_map = {}
 for key, value, value2 in zip(item_fea_df['label_name'], item_fea_df['label_code'], item_fea_df['data_type']):
     item_fea_map[key] = (value, value2)
@@ -49,9 +49,9 @@ item_fea_map = {'物品ID': 'item_id',
 item_table_name = ''
 
 
-user_fea_df = pd.read_csv('./user_map.csv')
+user_fea_df = pd.read_csv('../data/user_map.csv')
 user_fea_map = {}
-for key, value, value2 in zip(item_fea_df['label_name'], item_fea_df['label_code'], item_fea_df['data_type']):
+for key, value, value2 in zip(user_fea_df['label_name'], user_fea_df['label_code'], user_fea_df['data_type']):
     user_fea_map[key] = (value, value2)
 
 user_fea = {
@@ -70,9 +70,9 @@ user_fea = {
 
 user_table_name = ''
 
-interaction_fea_df = pd.read_csv('./interaction_map.csv')
+interaction_fea_df = pd.read_csv('../data/interaction_map.csv')
 interaction_fea_map = {}
-for key, value, value2 in zip(item_fea_df['label_name'], item_fea_df['label_code'], item_fea_df['data_type']):
+for key, value, value2 in zip(interaction_fea_df['label_name'], interaction_fea_df['label_code'], interaction_fea_df['data_type']):
     interaction_fea_map[key] = (value, value2)
     
 target_name = {

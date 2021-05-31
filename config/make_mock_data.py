@@ -30,7 +30,7 @@ def random_float(num,decimal):
     array = []
     
     for i in range(num):
-        array.append(random.uniform()(0, decimal))
+        array.append(random.uniform(0, decimal))
         
     return array
 
@@ -38,7 +38,7 @@ def random_float_1(num):
     array = []
     
     for i in range(num):
-        array.append(random.uniform()(0, 1))
+        array.append(random.uniform(0, 1))
         
     return array
 
@@ -55,10 +55,10 @@ all_num = len(user_id) * multi
 
 for label,value  in user_fea_map.items():
     if label == 'KYC等级':
-        array = [random.ssample(KYC_level) for _ in range(all_num)]
+        array = [random.choice(KYC_level) for _ in range(all_num)]
         user_df[label] = array
     elif label == 'KYC国家':
-        array = [random.sample(kyc_country) for _ in range(all_num)]
+        array = [random.choice(kyc_country) for _ in range(all_num)]
         user_df[label] = array
     
     else:
@@ -76,10 +76,10 @@ for label,value  in user_fea_map.items():
 a1=(2021,5,1,0,0,0,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
 a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
 user_df['user_create_time'] = make_random_time(all_num, a1, a2, False)
-user_df.to_csv('../data/user_fea.csv', index=False)
+user_df.to_csv('../data/user_fea.csv', mode='w', index=False)
 
 ######make item fea
-multi = 100000
+multi = 1000
 item_df = pd.DataFrame()
 item_df['item_id'] = item_id * multi        
 all_num = len(item_id) * multi
@@ -96,43 +96,42 @@ for label,value  in item_fea_map.items():
         item_df[label] = array
         
     elif value[1] == 'string_type':
-        array = [random.sample(['101','100','111','102']) for _ in range(all_num)]
+        array = [random.choice(['101','100','111','102']) for _ in range(all_num)]
         item_df[label] = array
         
 a1=(2021,5,1,0,0,0,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
 a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
 item_df['item_create_time'] = make_random_time(all_num, a1, a2, False)
-item_df.to_csv('../data/item_fea.csv', index=False)
+item_df.to_csv('../data/item_fea.csv', mode='w', index=False)
 
 
 ######make interaction fea
-multi = 10000
-item_df = pd.DataFrame()
-item_df['item_id'] = item_id * multi        
+multi = 100
+interation_df = pd.DataFrame()
+interation_df['item_id'] = item_id * multi
 all_num = len(item_id) * multi
-item_df['user_id'] = [random.sample(user_id) for _ in range(all_num)]  
-
+interation_df['user_id'] = [random.choice(user_id) for _ in range(all_num)]
 
 for label,value  in interaction_fea_map.items():
     if value[1] == 'float01':
         array = random_float_1(all_num)
-        item_df[label] = array
+        interation_df[label] = array
     elif value[1] == 'float':
         array = random_float(all_num,1000000)
-        item_df[label] = array
+        interation_df[label] = array
     elif value[1] == 'int':
         array = random_int(all_num, rank)
-        item_df[label] = array
+        interation_df[label] = array
         
     elif value[1] == 'string_type':
-        target = target_name.keys()
-        array = [random.sample(target) for _ in range(all_num)]
-        item_df[label] = array
+        target = list(target_name.keys())
+        array = [random.choice(target) for _ in range(all_num)]
+        interation_df[label] = array
         
 a1=(2021,5,1,0,0,1,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
 a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
-item_df['interaction_create_time'] = make_random_time(all_num, a1, a2, False)
-item_df.to_csv('../data/item_fea.csv', index=False)
+interation_df['interaction_create_time'] = make_random_time(all_num, a1, a2, False)
+interation_df.to_csv('../data/interaction_fea.csv', mode='w', index=False)
 
 
 

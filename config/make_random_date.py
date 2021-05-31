@@ -23,7 +23,7 @@ def make_random_time(num, a1, a2, if_stamp):
         t=random.randint(start,end)    #在开始和结束时间戳中随机取出一个
         date_touple=time.localtime(t)          #将时间戳生成时间元组
         date=time.strftime("%Y-%m-%d %H:%M:%S",date_touple)  #将时间元组转成格式化字符串（1976-05-21）
-        print(date)
+        # print(date)
         if if_stamp:
             timeArray = time.strptime(date, "%Y-%m-%d %H:%M:%S")
             timeStamp = int(time.mktime(timeArray))
@@ -34,4 +34,6 @@ def make_random_time(num, a1, a2, if_stamp):
     return array
         
 if __name__ == "__main__":
-    result = make_random_time(10, False)
+    a1 = (2021, 5, 1, 0, 0, 1, 0, 0, 0)  # 设置开始日期时间元组（2021-05-01 00：00：00）
+    a2 = (2021, 6, 30, 23, 59, 59, 0, 0, 0)  # 设置结束日期时间元组（2021-12-31 23：59：59）
+    result = make_random_time(10, a1, a2, False)
