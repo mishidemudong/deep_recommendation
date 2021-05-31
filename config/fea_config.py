@@ -6,13 +6,19 @@ Created on Wed May 26 15:28:29 2021
 @author: liang
 """
 
-#import pandas as pd
-#df = pd.read_csv('./interaction_fea.csv')
-#iteraction_fea = {}
-#for key, value in zip(df['字段名称'], df['英文标识']):
-#    iteraction_fea[key] = value
+import pandas as pd
 
-item_fea = {'物品ID': 'item_id',
+def Merge(dict1, dict2): 
+    res = {**dict1, **dict2} 
+    return res 
+
+
+item_fea_df = pd.read_csv('./item_fea.csv')
+item_fea_map = {}
+for key, value, value2 in zip(item_fea_df['label_name'], item_fea_df['label_code'], item_fea_df['data_type']):
+    item_fea_map[key] = (value, value2)
+
+item_fea_map = {'物品ID': 'item_id',
              '物品类别': 'item_type',
              '24 小时趋势': '24Htrend',
              '24 小时内上涨下跌比例': '24Htrendnum',
@@ -43,9 +49,14 @@ item_fea = {'物品ID': 'item_id',
 item_table_name = ''
 
 
+user_fea_df = pd.read_csv('./user_fea.csv')
+user_fea_map = {}
+for key, value, value2 in zip(item_fea_df['label_name'], item_fea_df['label_code'], item_fea_df['data_type']):
+    user_fea_map[key] = (value, value2)
+
 user_fea = {
          '测试用户': 'if_test',
-         '用户短id': 'user_id',
+         '用户id': 'user_id',
          'KYC等级': 'kyc_level',
          'KYC国家': 'kyc_country',
          '注册时间': 'register_time',
@@ -56,10 +67,28 @@ user_fea = {
          '60天内交易金额': 'trademoney_in_60days',
          '创建时间':'create_time'
         }
+
 user_table_name = ''
 
+interaction_fea_df = pd.read_csv('./interaction_fea.csv')
+interaction_fea_name = {}
+interaction_fea_type = {}
+for key, value in zip(item_fea_df['label_name'], item_fea_df['label_code']):
+    interaction_fea_name[key] = value
 
-iteraction_fea = {
+for key, value in zip(item_fea_df['label_name'], item_fea_df['data_type']):
+    interaction_fea_type[key] = value
+    
+target_name = {
+            '曝光':'SHOW',
+            '点击':'CLICK',
+            '关注':'FOLLOW',
+            '收藏':'FAVOURATE',
+            '评论':'REVIEW',
+            '购买':'BUY_CLICK'
+        }    
+
+interaction_fea = {
         '用户ID': 'user_id',
          '物品ID': 'item_id',
          '交互类型': 'interaction_type',
