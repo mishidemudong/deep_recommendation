@@ -10,9 +10,32 @@ Created on Tue May 18 15:00:24 2021
 #sparse_features = ["movie_id", "user_id",
 #                   "gender", "age", "occupation", "zip"]
 #target = ['rating']
+from deep_recommendation.config.fea_config import user_fea_type,item_fea_type,interaction_fea_type
 
 
 ############################
 task = 'regression' #regression
-sparse_features = ['C' + str(i) for i in range(1, 27)]
-dense_features = ['I' + str(i) for i in range(1, 14)]
+sparse_features = []
+dense_features = []
+
+
+for key, value in user_fea_type:
+    if value == 'int' or 'id' in key:
+        sparse_features.append(key)
+    elif value == 'string':
+        dense_features.append(key)
+
+
+for key, value in item_fea_type:
+    if value == 'int' or 'id' in key:
+        sparse_features.append(key)
+    elif value == 'string':
+        dense_features.append(key)
+        
+for key, value in interaction_fea_type:
+    if value == 'int' or 'id' in key:
+        sparse_features.append(key)
+    elif value == 'string':
+        dense_features.append(key)
+        
+target = ['交互类型']
