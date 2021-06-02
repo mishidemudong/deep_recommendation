@@ -13,8 +13,13 @@ import pandas as pd
 from fea_config import user_fea_map, item_fea_map, interaction_fea_map, target_name
 from make_random_date import make_random_time
 
-user_id = ['user_{}'.format(str(no)) for no in range(50000)]
-item_id = ['item_{}'.format(str(no)) for no in range(300)]
+user_df = pd.read_csv('../data/user_id.csv')['u_id']
+user_id = list(user_df.unique())
+
+item_df = pd.read_csv('../data/item_id.csv')['resource']
+item_id = list(item_df.unique())
+# user_id = ['user_{}'.format(str(no)) for no in range(50000)]
+# item_id = ['item_{}'.format(str(no)) for no in range(300)]
 
 
 
@@ -112,15 +117,17 @@ interation_df['item_id'] = item_id * multi
 all_num = len(item_id) * multi
 interation_df['user_id'] = [random.choice(user_id) for _ in range(all_num)]
 
-for label,value  in interaction_fea_map.items():
+for label,value in interaction_fea_map.items():
+
     if value[1] == 'float01':
         array = random_float_1(all_num)
         interation_df[label] = array
     elif value[1] == 'float':
         array = random_float(all_num,1000000)
         interation_df[label] = array
-    elif value[1] == 'int':
-        array = random_int(all_num, rank)
+
+    elif 'int' in value[1]:
+        array = random_int(all_num, int(value[1][-2:]))
         interation_df[label] = array
         
     elif value[1] == 'string_type':
@@ -131,7 +138,7 @@ for label,value  in interaction_fea_map.items():
 a1=(2021,5,1,0,0,1,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
 a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
 interation_df['interaction_create_time'] = make_random_time(all_num, a1, a2, False)
-interation_df.to_csv('../data/interaction_fea.csv', mode='w', index=False)
+interation_df[['user_id','item_id','交互类型','物品所在顺序','历史点击次数','历史购买次数','interaction_create_time']].to_csv('../data/interaction_fea.csv', mode='w', index=False)
 
 
 
