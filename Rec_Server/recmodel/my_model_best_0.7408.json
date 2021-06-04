@@ -1,1 +1,0 @@
-{"model_type": "wdl", "all_params": {"dnn_him": 512, "batch_size": 128, "lrate": 0.01}, "fea_model_path": "./featuremodel/fea_model.pkl", "best_model_path": "./recmodel", "metrics": {"test LogLoss": 0.5047, "test AUC": 0.7408}, "saved_model_path": "./recmodel/my_model_best_0.7408.weights"}
