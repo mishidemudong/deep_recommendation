@@ -15,7 +15,7 @@ from make_random_date import make_random_time
 from tqdm import tqdm
 import pickle
 
-fea_config = pickle.load(open('/media/liang/Project2/推荐系统/git_code/deep_recommendation/fea_config.pkl', 'rb')) 
+fea_config = pickle.load(open('../fea_config.pkl', 'rb'))
 
 sparse_features = fea_config['sparse_features']
 dense_features = fea_config['dense_features']
