@@ -31,7 +31,7 @@ class RecPredictHandler():
             
     def buildfeaturemodel(self):
 
-        self.fea_model = pickle.load(open(self.config['fea_model_path'], 'rb')) 
+        self.fea_model = pickle.load(open(self.config['fea_model_savepath'], 'rb')) 
 #        self.dense_feamodel = pickle.load(open(self.fea_model['dense_feamoel_path'], 'rb')) 
         
         print("load fea_model success")

@@ -18,7 +18,7 @@ from utils.load_fea_main import loadalldata
 
 import os
 os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 config = tf.compat.v1.ConfigProto()
@@ -28,7 +28,7 @@ sess = tf.compat.v1.Session(config=config)
 
 
 print("loading model...")
-config_path = './recmodel/my_model_best_0.7408.json'
+config_path = './recmodel/my_model_best_1.2661.json'
 rec_model = RecPredictHandler(config_path)
 print("load REC model success !")
 
