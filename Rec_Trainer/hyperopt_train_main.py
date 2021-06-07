@@ -41,7 +41,7 @@ config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
 sess = tf.compat.v1.Session(config=config)
 
-fea_config = pickle.load(open('/media/liang/Project2/推荐系统/git_code/deep_recommendation/fea_config.pkl', 'rb')) 
+fea_config = pickle.load(open('../fea_config.pkl', 'rb')) 
 
 sparse_features = fea_config['sparse_features']
 dense_features = fea_config['dense_features']
