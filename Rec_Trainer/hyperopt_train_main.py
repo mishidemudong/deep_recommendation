@@ -57,7 +57,7 @@ def makedata1():
     This function is separated from create_model() so that hyperopt
     won't reload data for each evaluation run.
     """
-    fea_config = pickle.load(open('/media/liang/Project2/推荐系统/git_code/deep_recommendation/fea_config.pkl', 'rb')) 
+    fea_config = pickle.load(open('../fea_config.pkl', 'rb')) 
     sparse_features = [fea_config['map_eng_name'][item] for item in fea_config['sparse_features']]
     dense_features = [fea_config['map_eng_name'][item] for item in fea_config['dense_features']]
     target = [fea_config['map_eng_name'][ fea_config['target'][0]]]
@@ -377,22 +377,22 @@ def saveTrainData(fea_path, ori_data_path, fea_model_savepath, train_data_savepa
 
 if __name__ == "__main__":    
     
-#    config_path = './config.json'
-#    config = {}
-#    ori_data_path = '/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/train_eng_fea.csv'
-#    fea_path      = '/media/liang/Project2/推荐系统/git_code/deep_recommendation/fea_config.pkl'
-#    fea_model_savepath = './featuremodel/fea_model.pkl'
-#    train_data_savepath = './data/train_test_split.pkl'
-#    
-#    config['ori_data_path'] = ori_data_path
-#    config['fea_path'] = fea_path
-#    config['fea_model_savepath'] = fea_model_savepath
-#    config['train_data_savepath'] = train_data_savepath
-#    
-#    with open(config_path,'w') as file_obj:
-#        json.dump(config,file_obj)
-#        
-#    saveTrainData(fea_path, ori_data_path, fea_model_savepath, train_data_savepath)
+    config_path = './config.json'
+    config = {}
+    ori_data_path = '../data/train_eng_fea.csv'
+    fea_path      = '../fea_config.pkl'
+    fea_model_savepath = './featuremodel/fea_model.pkl'
+    train_data_savepath = './data/train_test_split.pkl'
+    
+    config['ori_data_path'] = ori_data_path
+    config['fea_path'] = fea_path
+    config['fea_model_savepath'] = fea_model_savepath
+    config['train_data_savepath'] = train_data_savepath
+    
+    with open(config_path,'w') as file_obj:
+        json.dump(config,file_obj)
+        
+    saveTrainData(fea_path, ori_data_path, fea_model_savepath, train_data_savepath)
     
 
     best_run, best_model, space = optim.minimize(model=create_model,
