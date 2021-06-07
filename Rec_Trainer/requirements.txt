@@ -7,3 +7,4 @@ deepctr==0.8.5
 hyperopt==0.1.2
 hyperas==0.4.1
 scikit_learn==0.22.0
+pandas-redshift
