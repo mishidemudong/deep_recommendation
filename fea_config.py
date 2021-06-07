@@ -61,8 +61,8 @@ for label,value  in (Merge(Merge(user_fea_map,interaction_fea_map), item_fea_map
     elif 'ID' in label:
         sparse_features.add(label)
         
-    elif value[1] == 'string':
-        dense_features.add(label)
+    elif value[1] == 'string_type':
+        sparse_features.add(label)
         
         
 

@@ -377,57 +377,60 @@ def saveTrainData(fea_path, ori_data_path, fea_model_savepath, train_data_savepa
 
 if __name__ == "__main__":    
     
-    config_path = './config.json'
-    config = {}
-    ori_data_path = '/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/train_eng_fea.csv'
-    fea_path      = '/media/liang/Project2/推荐系统/git_code/deep_recommendation/fea_config.pkl'
-    fea_model_savepath = './featuremodel/fea_model.pkl'
-    train_data_savepath = './data/train_test_split.pkl'
+#    config_path = './config.json'
+#    config = {}
+#    ori_data_path = '/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/train_eng_fea.csv'
+#    fea_path      = '/media/liang/Project2/推荐系统/git_code/deep_recommendation/fea_config.pkl'
+#    fea_model_savepath = './featuremodel/fea_model.pkl'
+#    train_data_savepath = './data/train_test_split.pkl'
+#    
+#    config['ori_data_path'] = ori_data_path
+#    config['fea_path'] = fea_path
+#    config['fea_model_savepath'] = fea_model_savepath
+#    config['train_data_savepath'] = train_data_savepath
+#    
+#    with open(config_path,'w') as file_obj:
+#        json.dump(config,file_obj)
+#        
+#    saveTrainData(fea_path, ori_data_path, fea_model_savepath, train_data_savepath)
     
-    config['ori_data_path'] = ori_data_path
-    config['fea_path'] = fea_path
-    config['fea_model_savepath'] = fea_model_savepath
-    config['train_data_savepath'] = train_data_savepath
-    
-    with open(config_path,'w') as file_obj:
-        json.dump(config,file_obj)
-        
-    saveTrainData(fea_path, ori_data_path, fea_model_savepath, train_data_savepath)
-    
-#    best_run, best_model, space = optim.minimize(model=create_model,
-#                                          data=makedata,
-#                                          algo=tpe.suggest,
-#                                          max_evals=5,
-#                                          trials=Trials(),
-#                                          return_space=True)
+
+    best_run, best_model, space = optim.minimize(model=create_model,
+                                          data=makedata,
+                                          algo=tpe.suggest,
+                                          max_evals=5,
+                                          trials=Trials(),
+                                          return_space=True)
 ##    
-#    X_train, Y_train, X_test, Y_test = makedata()
-###
-###    
-#    print("Evalutation of best performing model:")
-#    print(best_model.evaluate(X_test, Y_test))
-#    print("Best performing model chosen hyper-parameters:")
-#    print(best_run)
-#    
-#    modelpath = './WDLModel'
-#    filename='{}/best_hyperparams.json'.format(modelpath)
-#    
-#    high_name  = file_name('./WDLModel', '.json')
-#    
-#    if task == 'binary':
-#        config = json.load(open(sorted(high_name)[-1],'r'))
-#    elif task == 'regression':
-#        config = json.load(open(sorted(high_name)[0],'r'))
-#    
-#    best_config = config
-#    for key,value in best_run.items():
-#        if key in best_config['all_params'].keys():
-#            best_config['all_params'][key] = best_config['all_params'][key][value]
-#        
-#        
-#    with open(filename,'w') as file_obj:
-#        json.dump(best_config,file_obj)
+    X_train, Y_train, X_test, Y_test = makedata()
+##
+##    
+    print("Evalutation of best performing model:")
+    print(best_model.evaluate(X_test, Y_test))
+    print("Best performing model chosen hyper-parameters:")
+    print(best_run)
+    
+    modelpath = './WDLModel'
+    filename='{}/best_hyperparams.json'.format(modelpath)
+    
+    high_name  = file_name('./WDLModel', '.json')
+    
+    if task == 'binary':
+        config = json.load(open(sorted(high_name)[-1],'r'))
+    elif task == 'regression':
+        config = json.load(open(sorted(high_name)[0],'r'))
+    
+    best_config = config
+    for key,value in best_run.items():
+        if key in best_config['all_params'].keys():
+            print(key)
+            print(best_config['all_params'][key])
+            best_config['all_params'][key] = best_config['all_params'][key][value]
         
+        
+    with open(filename,'w') as file_obj:
+        json.dump(best_config,file_obj)
+#        
     '''
     [0.552747669549783, 0.52751887, 0.7616]
     Best performing model chosen hyper-parameters:

@@ -90,6 +90,7 @@ multi = 10
 enum_list = ['KYC等级', 'KYC国家']
 KYC_level = ['A','B','C']
 kyc_country = ['USA', 'JAPAN', 'ITELY', 'UK']
+if_test = [True, False]
 rank = 600
 user_df = pd.DataFrame()
 user_df['用户ID'] = user_id
@@ -101,6 +102,11 @@ user_df[label] = array
 label = 'KYC国家'
 array = [random.choice(kyc_country) for _ in range(all_num)]
 user_df[label] = array
+label = '测试用户'
+array = [random.choice(if_test) for _ in range(all_num)]
+user_df[label] = array
+
+
 user_df.to_csv('../data/user_base_info.csv', index=False)
 #user_df = pd.read_csv('../data/user_base_info.csv')
 

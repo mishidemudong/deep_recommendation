@@ -6,5 +6,4 @@ pandas==1.0.3
 deepctr==0.8.5
 hyperopt==0.1.2
 hyperas==0.4.1
-scikit_learn==0.24.2
-tensorflow==2.5.0
+scikit_learn==0.22.0
