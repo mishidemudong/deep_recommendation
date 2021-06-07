@@ -22,7 +22,7 @@ from db_utils import dbconfig, s3config
 
 pr.connect_to_redshift(**config)
 
-
+df = pr.redshift_to_pandas('select * from user_fea')
 
 save_df = pd.read_csv('../data/train_eng_fea.csv')
 

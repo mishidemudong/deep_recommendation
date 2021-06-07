@@ -13,7 +13,10 @@ import pandas as pd
 import numpy as np
 import time
 from tqdm import tqdm
+import pandas_redshift as pr
+import redis
 
+from db_utils import dbconfig, s3config 
 
 def left_joinFunc(df1,df2,colname):
     return pd.merge(df1, df2,how='left', on=colname)# 
@@ -27,11 +30,16 @@ def Merge(dict1, dict2):
 
 def loadalldata(user_id, itemid_list):
     
-    user_df = get_user_data(user_id)
+    pr_curse= pr.connect_to_redshift(**dbconfig)
     
-    item_df = get_item_data(itemid_list)
+    pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True)
+    redis_curse = redis.Redis(connection_pool=pool)
+
+    user_df = get_user_data(redis_curse, user_id)
     
-    interation_df = get_interaction_data(user_id, itemid_list)
+    item_df = get_item_data(pr, itemid_list)
+    
+    interation_df = get_interaction_data(redis_curse, user_id, itemid_list)
     
 #    pred_df = left_joinFunc(interactordata, user_data, 'user_id')
 #    pred_df = left_joinFunc(pred_df, item_data, 'item_id')

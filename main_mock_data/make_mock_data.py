@@ -87,28 +87,28 @@ def random_float_1(num):
 
 ######make user fea
 multi = 10
-enum_list = ['KYC等级', 'KYC国家']
-KYC_level = ['A','B','C']
-kyc_country = ['USA', 'JAPAN', 'ITELY', 'UK']
-if_test = [True, False]
+#enum_list = ['KYC等级', 'KYC国家']
+#KYC_level = ['A','B','C']
+#kyc_country = ['USA', 'JAPAN', 'ITELY', 'UK']
+#if_test = [True, False]
 rank = 600
-user_df = pd.DataFrame()
-user_df['用户ID'] = user_id
+#user_df = pd.DataFrame()
+#user_df['用户ID'] = user_id
 all_num = len(user_id)
+#
+#label = 'KYC等级'
+#array = [random.choice(KYC_level) for _ in range(all_num)]
+#user_df[label] = array
+#label = 'KYC国家'
+#array = [random.choice(kyc_country) for _ in range(all_num)]
+#user_df[label] = array
+#label = '测试用户'
+#array = [random.choice(if_test) for _ in range(all_num)]
+#user_df[label] = array
 
-label = 'KYC等级'
-array = [random.choice(KYC_level) for _ in range(all_num)]
-user_df[label] = array
-label = 'KYC国家'
-array = [random.choice(kyc_country) for _ in range(all_num)]
-user_df[label] = array
-label = '测试用户'
-array = [random.choice(if_test) for _ in range(all_num)]
-user_df[label] = array
 
-
-user_df.to_csv('../data/user_base_info.csv', index=False)
-#user_df = pd.read_csv('../data/user_base_info.csv')
+#user_df.to_csv('../data/user_base_info.csv', index=False)
+user_df = pd.read_csv('../data/user_base_info.csv')
 
 for label,value  in user_fea_map.items():
     if value[1] == 'float01':
@@ -125,6 +125,8 @@ a1=(2021,5,1,0,0,0,0,0,0)        #设置开始日期时间元组（2021-05-01 00
 a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
 user_df['user_create_time'] = make_random_time(all_num, a1, a2, False)
 user_df.to_csv('../data/user_fea.csv', mode='w+', index=False)
+eng = user_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
+eng.to_csv('../data/user_eng_fea.csv', mode='w+', index=False)
 
 ######make item fea
 multi = 1000
@@ -152,8 +154,9 @@ for label,value  in item_fea_map.items():
 a1=(2021,5,1,0,0,0,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
 a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
 item_df['item_create_time'] = make_random_time(all_num, a1, a2, False)
-item_df.to_csv('../data/item_fea.csv', mode='w', index=False)
-
+item_df.to_csv('../data/item_fea.csv', mode='w+', index=False)
+eng = item_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
+eng.to_csv('../data/item_eng_fea.csv', mode='w+', index=False)
 
 ######make interaction fea
 multi = 100
@@ -185,7 +188,8 @@ a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23
 interation_df['interaction_create_time'] = make_random_time(all_num, a1, a2, False)
 interation_df = interation_df[['用户ID','物品ID','交互类型','物品所在顺序','历史点击次数','历史购买次数','interaction_create_time']]
 interation_df.to_csv('../data/interaction_fea.csv', mode='w', index=False)
-
+eng = interation_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
+eng.to_csv('../data/interaction_eng_fea.csv', mode='w+', index=False)
 
 
 
