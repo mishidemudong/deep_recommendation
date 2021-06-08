@@ -14,6 +14,7 @@ import pandas as pd
 from make_random_date import make_random_time
 from tqdm import tqdm
 import pickle
+import os
 
 fea_config = pickle.load(open('../fea_config.pkl', 'rb'))
 
@@ -124,10 +125,13 @@ for label,value  in user_fea_map.items():
 a1=(2021,5,1,0,0,0,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
 a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
 user_df['user_create_time'] = make_random_time(all_num, a1, a2, False)
-user_df.to_csv('../data/user_fea.csv', mode='w+', index=False)
+user_df.to_csv('../data/user_fea.csv', mode='w', index=False)
 eng = user_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
-eng.to_csv('../data/user_eng_fea.csv', mode='w+', index=False)
-
+if os.path.exists('../data/user_eng_fea.csv'):
+    eng.to_csv('../data/user_eng_fea.csv', mode ='a',header=False, index= False)
+else:    
+    eng.to_csv('../data/user_eng_fea.csv', mode='w', index=False)
+    
 ######make item fea
 multi = 1000
 item_df = pd.DataFrame()
@@ -154,9 +158,13 @@ for label,value  in item_fea_map.items():
 a1=(2021,5,1,0,0,0,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
 a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
 item_df['item_create_time'] = make_random_time(all_num, a1, a2, False)
-item_df.to_csv('../data/item_fea.csv', mode='w+', index=False)
+item_df.to_csv('../data/item_fea.csv', mode='w', index=False)
 eng = item_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
-eng.to_csv('../data/item_eng_fea.csv', mode='w+', index=False)
+if os.path.exists('../data/item_eng_fea.csv'):
+    eng.to_csv('../data/item_eng_fea.csv', mode ='a',header=False, index= False)
+else:    
+    eng.to_csv('../data/item_eng_fea.csv', mode='w', index=False)
+
 
 ######make interaction fea
 multi = 100
@@ -189,7 +197,10 @@ interation_df['interaction_create_time'] = make_random_time(all_num, a1, a2, Fal
 interation_df = interation_df[['用户ID','物品ID','交互类型','物品所在顺序','历史点击次数','历史购买次数','interaction_create_time']]
 interation_df.to_csv('../data/interaction_fea.csv', mode='w', index=False)
 eng = interation_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
-eng.to_csv('../data/interaction_eng_fea.csv', mode='w+', index=False)
+if os.path.exists('../data/interaction_eng_fea.csv'):
+    eng.to_csv('../data/interaction_eng_fea.csv', mode ='a',header=False, index= False)
+else:    
+    eng.to_csv('../data/interaction_eng_fea.csv', mode='w', index=False)
 
 
 
@@ -216,6 +227,9 @@ for index, item in tqdm(train_df.iterrows()):
         
 new_df.to_csv('../data/train_fea.csv', mode ='w',index= False)
 new_df.rename(columns=fea_config['map_eng_name'], inplace=True) 
-new_df.to_csv('../data/train_eng_fea.csv', mode ='w',index= False)
+if os.path.exists('../data/train_eng_fea.csv'):
+    new_df.to_csv('../data/train_eng_fea.csv', mode ='a',header=False, index= False)
+else:
+    new_df.to_csv('../data/train_eng_fea.csv', mode ='w', index= False)
 
 
