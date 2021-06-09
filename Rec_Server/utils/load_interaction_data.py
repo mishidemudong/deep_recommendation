@@ -31,7 +31,7 @@ def get_interaction_redis(curse_redis, id_list):
     #####get data from redis
     dta = curse_redis.mget(id_list)
 #    print(dta[0])
-    columns_list = curse_redis.keys()
+    columns_list = eval(curse_redis.get('COLUMNS'))
 #    data = next(item for item in dta if item is not None)
 #    columns_list = list(eval(data).keys())
     

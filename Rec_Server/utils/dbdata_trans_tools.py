@@ -74,6 +74,9 @@ def writedf2redis(r, df, key):
     for index, item in tqdm(df.iterrows()):
         keys.append(item[key])
         r.set(item[key], str(item.to_dict()))
+        
+    ####set columns    
+    r.set('COLUMNS', str(df.columns.tolist()))
     print('write data to redis done!')
     
     return keys
@@ -87,7 +90,7 @@ def writedf2redis2keys(r, df, key1, key2):
         
         keys.append(key)
     print('write data to redis done!')
-    
+    r.set('COLUMNS', str(df.columns.tolist()))
     return keys
     
 

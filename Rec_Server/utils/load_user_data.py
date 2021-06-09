@@ -33,7 +33,7 @@ def get_data_redis(curse_redis, id_list):
     #####get data from redis
     dta = curse_redis.mget(id_list)
 #    columns_list = list(eval(dta[0]).keys())
-    columns_list = curse_redis.keys()
+    columns_list = eval(curse_redis.get('COLUMNS'))
     data_array = []
     for item in dta:
         if item != None:
