@@ -8,7 +8,7 @@ Created on Mon Jun  7 17:29:29 2021
 from tqdm import tqdm
 import pandas as pd
 import pandas_redshift as pr
-from db_utils import dbconfig, s3config, redis_config
+from db_utils import dbconfig, s3config, redis_interaction_config, redis_item_config, redis_user_config 
 import redis
 
 
@@ -21,58 +21,112 @@ def transpose_2d(data):
     transposed = list(map(list, zip(*data)))
     return transposed
 
-def get_sqldata(curse, columns, user_id=None):
+def get_sqldata(curse, columns, tablename, user_id=None):
     
     
     if user_id == None:
         sql = '''
             
-            select user_id,max(user_create_time)
+            select {}
                     from 表
                     group by user_id
             
-            '''
+            '''.format(columns)
         
     else:
         sql = '''
             
-            select user_id,max(user_create_time)
-                    from 表
+            select {}
+                    from {}
                     group by user_id
                     where user_id in ({})
             
-            '''.format(user_id)
+            '''.format(columns, tablename, user_id)
             
     user_df = curse.redshift_to_pandas(sql)  
     
     
     return user_df
 
+def interaction_data_func(curse, columns, tablename, user_id=None):
+    
+    sql = '''
+    
+
+    select tcfi.* from t_cust_face_identify tcfi where tcfi.cust_no = '2004081422003482994' order by tcfi.create_time desc limit 1;
+
+
+    
+    '''
+    
+    user_df = curse.redshift_to_pandas(sql)  
+    
+    
+    return user_df
 
 ####redis
 
 #r.set('user_fea', bytes_)
 
-def writedata2redis(r, df, keys):
+def writedf2redis(r, df, key):
     print('start write data to redis...')
-    for index, item in tqdm(user_df.iterrows()):
-        r.set(item['user_id'], str(item.to_dict()))
+    keys = []
+    for index, item in tqdm(df.iterrows()):
+        keys.append(item[key])
+        r.set(item[key], str(item.to_dict()))
     print('write data to redis done!')
+    
+    return keys
+    
+def writedf2redis2keys(r, df, key1, key2):
+    print('start write data to redis...')
+    keys = []
+    for index, item in tqdm(df.iterrows()):
+        key = str(item[key1]) + '_' + str(item[key2])
+        r.set(key, str(item.to_dict()))
+        
+        keys.append(key)
+    print('write data to redis done!')
+    
+    return keys
     
 
     
     
 if __name__ == "__main__":    
     
-    curse = pr.connect_to_redshift(**dbconfig)
-    pool = redis.ConnectionPool()
+#    curse = pr.connect_to_redshift(**dbconfig)
+    
+    ###############################################user##########################################################
+    ######read data
+    user_df = pd.read_csv('/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/user_eng_fea.csv').drop_duplicates(['user_id'])
+#    columns = ''
+#    user_df =  get_sqldata(curse, columns)
+    
+    #####write
+    pool = redis.ConnectionPool(**redis_user_config)
     redis_curse = redis.Redis(connection_pool=pool)
-    user_df = pd.read_csv('/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/user_eng_fea.csv')
+    writedf2redis(redis_curse, user_df, 'user_id')
     
-    user_df =  get_sqldata(curse, user_id)
+    ###############################################item##########################################################
+    #####read data
+    item_df = pd.read_csv('/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/item_eng_fea.csv').drop_duplicates(['item_id'])#.drop('UUID', 1)
+#    columns = ''
+#    item_df =  get_sqldata(curse, columns)
+    #####write
+    pool = redis.ConnectionPool(**redis_item_config)
+    redis_curse = redis.Redis(connection_pool=pool)
+    writedf2redis(redis_curse, item_df, 'item_id')
     
-    writedata2redis(redis_curse, user_df, )
-    
+    ###############################################interaction##########################################################
+    #####read data
+    interaction_df = pd.read_csv('/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/interaction_eng_fea.csv').drop_duplicates()
+#    columns = ''
+#    interaction_df =  get_sqldata(curse, columns)
+    #####write
+    pool = redis.ConnectionPool(**redis_interaction_config)
+    redis_curse = redis.Redis(connection_pool=pool)
+    interaction_keys = writedf2redis2keys(redis_curse, interaction_df, 'user_id', 'item_id')
     
     
     

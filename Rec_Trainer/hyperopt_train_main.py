@@ -327,14 +327,14 @@ def saveTrainData(fea_path, ori_data_path, fea_model_savepath, train_data_savepa
     for feat in sparse_features:
         lbe = LabelEncoder()
         data[feat] = lbe.fit_transform(data[feat])
+        lbe.classes_ = np.append(lbe.classes_, '<unknow>')
         sparse_fea[feat] = lbe
     mms = MinMaxScaler(feature_range=(0, 1))
     data[dense_features] = mms.fit_transform(data[dense_features])
-    
+#    mms.classes_ = np.append(mms.classes_, '<unknow>')
     
     fea_model['sparse_fea_model'] = sparse_fea
     fea_model['dense_fea_model'] = mms
-
 
     # 2.count #unique features for each sparse field,and record dense feature field name
     fixlen_feature_columns = [SparseFeat(feat, vocabulary_size=data[feat].max() + 1,embedding_dim=4 )
@@ -347,11 +347,12 @@ def saveTrainData(fea_path, ori_data_path, fea_model_savepath, train_data_savepa
     fea_model['dnn_feature_columns'] = dnn_feature_columns
     fea_model['linear_feature_columns'] = linear_feature_columns
     
+    feature_names = get_feature_names(linear_feature_columns + dnn_feature_columns)
+    fea_model['feature_names'] = feature_names
+    
     output = open(fea_model_savepath, 'wb')
     pickle.dump(fea_model, output)
     output.close()
-
-    feature_names = get_feature_names(linear_feature_columns + dnn_feature_columns)
     
     data[sparse_features] = data[sparse_features].fillna('-1', )
     data[dense_features] = data[dense_features].fillna(0, )
@@ -395,41 +396,42 @@ if __name__ == "__main__":
     saveTrainData(fea_path, ori_data_path, fea_model_savepath, train_data_savepath)
     
 
-    best_run, best_model, space = optim.minimize(model=create_model,
-                                          data=makedata,
-                                          algo=tpe.suggest,
-                                          max_evals=5,
-                                          trials=Trials(),
-                                          return_space=True)
-##    
-    X_train, Y_train, X_test, Y_test = makedata()
-##
-##    
-    print("Evalutation of best performing model:")
-    print(best_model.evaluate(X_test, Y_test))
-    print("Best performing model chosen hyper-parameters:")
-    print(best_run)
-    
-    modelpath = './WDLModel'
-    filename='{}/best_hyperparams.json'.format(modelpath)
-    
-    high_name  = file_name('./WDLModel', '.json')
-    
-    if task == 'binary':
-        config = json.load(open(sorted(high_name)[-1],'r'))
-    elif task == 'regression':
-        config = json.load(open(sorted(high_name)[0],'r'))
-    
-    best_config = config
-    for key,value in best_run.items():
-        if key in best_config['all_params'].keys():
-            print(key)
-            print(best_config['all_params'][key])
-            best_config['all_params'][key] = best_config['all_params'][key][value]
-        
-        
-    with open(filename,'w') as file_obj:
-        json.dump(best_config,file_obj)
+
+#    best_run, best_model, space = optim.minimize(model=create_model,
+#                                          data=makedata,
+#                                          algo=tpe.suggest,
+#                                          max_evals=5,
+#                                          trials=Trials(),
+#                                          return_space=True)
+###    
+#    X_train, Y_train, X_test, Y_test = makedata()
+###
+###    
+#    print("Evalutation of best performing model:")
+#    print(best_model.evaluate(X_test, Y_test))
+#    print("Best performing model chosen hyper-parameters:")
+#    print(best_run)
+#    
+#    modelpath = './WDLModel'
+#    filename='{}/best_hyperparams.json'.format(modelpath)
+#    
+#    high_name  = file_name('./WDLModel', '.json')
+#    
+#    if task == 'binary':
+#        config = json.load(open(sorted(high_name)[-1],'r'))
+#    elif task == 'regression':
+#        config = json.load(open(sorted(high_name)[0],'r'))
+#    
+#    best_config = config
+#    for key,value in best_run.items():
+#        if key in best_config['all_params'].keys():
+#            print(key)
+#            print(best_config['all_params'][key])
+#            best_config['all_params'][key] = best_config['all_params'][key][value]
+#        
+#        
+#    with open(filename,'w') as file_obj:
+#        json.dump(best_config,file_obj)
 #        
     '''
     [0.552747669549783, 0.52751887, 0.7616]

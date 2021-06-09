@@ -12,8 +12,9 @@ from flask_cors import CORS
 import tensorflow as tf
 import json
 from rec_predict import RecPredictHandler
-# from recall_main import get_itemidlist
+#from recall_main import get_itemidlist
 from utils.load_fea_main import loadalldata
+from utils.db_utils import build_redis_connect
 
 
 import os
@@ -28,11 +29,15 @@ sess = tf.compat.v1.Session(config=config)
 
 
 print("loading model...")
-config_path = './recmodel/my_model_best_1.2661.json'
+config_path = './recmodel/my_model_best_0.0007.json'
 rec_model = RecPredictHandler(config_path)
 print("load REC model success !")
 
-print("start conversation server success !")
+
+redis_curse = build_redis_connect()
+print("build redis curse success !")
+
+print("start rec server success !")
 
 
 
@@ -44,14 +49,16 @@ def rec_score_func():
     sample = request.get_json()
     
     #1 召回item_id 
-    # itemid_list = get_itemidlist('all')
+#    itemid_list = get_itemidlist('all')
     itemid_list = sample['item_list']
+    user_list = sample['user_list']
     #2 load user_data, item_data, interaction_data
     #  or load user_fea, item_data, interaction_fea
-    pred_data = loadalldata(sample['user_id'], itemid_list)
+    pred_data = loadalldata(redis_curse, user_list, itemid_list)
 
     #3predict
-    response = rec_model.predict_test(pred_data)
+    response = rec_model.predict(sample, pred_data)
+#    response = rec_model.predict_test(pred_data)
 
     if response: 
         res = {
