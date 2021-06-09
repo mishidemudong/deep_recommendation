@@ -40,10 +40,16 @@ def get_interaction_redis(curse_redis, id_list):
         if item != None:
             value_list = list(eval(item).values())
         else:
-            value_list = [''] * len(columns_list)
+            value_list = [None] * len(columns_list)
         data_array.append(value_list)
     result_df = pd.DataFrame(data_array, columns = columns_list)  
     
+    user_id, item_id = [],[]
+    for item in id_list:
+        user_id.append(item.split('_')[0])
+        item_id.append(item.split('_')[1])
+    result_df['user_id'] = user_id
+    result_df['item_id'] = item_id
     
     return result_df
 

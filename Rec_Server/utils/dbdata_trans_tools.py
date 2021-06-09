@@ -109,8 +109,8 @@ if __name__ == "__main__":
     #####write
     pool = redis.ConnectionPool(**redis_user_config)
     redis_curse = redis.Redis(connection_pool=pool)
-    writedf2redis(redis_curse, user_df, 'user_id')
-    
+#    writedf2redis(redis_curse, user_df, 'user_id')
+    redis_curse.set('COLUMNS', str(user_df.columns.tolist()))
     ###############################################item##########################################################
     #####read data
     item_df = pd.read_csv('/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/item_eng_fea.csv').drop_duplicates(['item_id'])#.drop('UUID', 1)
@@ -119,8 +119,8 @@ if __name__ == "__main__":
     #####write
     pool = redis.ConnectionPool(**redis_item_config)
     redis_curse = redis.Redis(connection_pool=pool)
-    writedf2redis(redis_curse, item_df, 'item_id')
-    
+#    writedf2redis(redis_curse, item_df, 'item_id')
+    redis_curse.set('COLUMNS', str(item_df.columns.tolist()))
     ###############################################interaction##########################################################
     #####read data
     interaction_df = pd.read_csv('/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/interaction_eng_fea.csv').drop_duplicates()
@@ -129,7 +129,7 @@ if __name__ == "__main__":
     #####write
     pool = redis.ConnectionPool(**redis_interaction_config)
     redis_curse = redis.Redis(connection_pool=pool)
-    interaction_keys = writedf2redis2keys(redis_curse, interaction_df, 'user_id', 'item_id')
-    
+#    interaction_keys = writedf2redis2keys(redis_curse, interaction_df, 'user_id', 'item_id')
+    redis_curse.set('COLUMNS', str(interaction_df.columns.tolist()))
     
     

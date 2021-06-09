@@ -10,7 +10,7 @@ import pandas as pd
 import requests
 
 
-def get_data_redis(curse_redis, id_list):
+def get_data_redis(curse_redis, id_list, id_name):
     
     #####get data from redis
     dta = curse_redis.mget(id_list)
@@ -22,11 +22,11 @@ def get_data_redis(curse_redis, id_list):
         if item != None:
             value_list = list(eval(item).values())
         else:
-            value_list = [''] * len(columns_list)
+            value_list = [None] * len(columns_list)
             
         data_array.append(value_list)
-    result_df = pd.DataFrame(data_array, columns= columns_list)  
-    
+    result_df = pd.DataFrame(data_array, columns = columns_list)  
+    result_df[id_name] = id_list
     return result_df
 
 def get_item_api(itemid_list):

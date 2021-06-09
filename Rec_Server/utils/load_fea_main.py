@@ -32,9 +32,9 @@ def Merge(dict1, dict2):
 
 def loadalldata(redis_curse, user_list, item_list):
 
-    user_df = get_data_redis(redis_curse['user'], user_list)
+    user_df = get_data_redis(redis_curse['user'], user_list, 'user_id')
     
-    item_df = get_data_redis(redis_curse['item'], item_list)
+    item_df = get_data_redis(redis_curse['item'], item_list, 'item_id')
     
     interact_id = makeinteraction_id(user_list, item_list)
     interation_df = get_interaction_redis(redis_curse['interaction'], interact_id)
