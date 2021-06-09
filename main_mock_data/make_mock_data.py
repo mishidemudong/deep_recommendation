@@ -18,6 +18,7 @@ import os
 
 fea_config = pickle.load(open('../fea_config.pkl', 'rb'))
 
+
 sparse_features = fea_config['sparse_features']
 dense_features = fea_config['dense_features']
 target = fea_config['target']
