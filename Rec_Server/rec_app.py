@@ -50,8 +50,8 @@ def rec_score_func():
     
     #1 召回item_id 
 #    itemid_list = get_itemidlist('all')
-    itemid_list = sample['item_list']
-    user_list = sample['user_list']
+    itemid_list = list(set(sample['item_list']))
+    user_list = list(set(sample['user_list']))
     #2 load user_data, item_data, interaction_data
     #  or load user_fea, item_data, interaction_fea
     pred_data = loadalldata(redis_curse, user_list, itemid_list)
