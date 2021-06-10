@@ -126,6 +126,7 @@ if __name__ == "__main__":
     interaction_df = pd.read_csv('../../data/interaction_eng_fea.csv').drop_duplicates()
 #    columns = ''
 #    interaction_df =  get_sqldata(curse, columns)
+
     #####write
     pool = redis.ConnectionPool(**redis_interaction_config)
     redis_curse = redis.Redis(connection_pool=pool)
