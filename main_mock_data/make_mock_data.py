@@ -110,59 +110,59 @@ all_num = len(user_id)
 
 
 #user_df.to_csv('../data/user_base_info.csv', index=False)
-#user_df = pd.read_csv('../data/user_base_info.csv')
+user_df = pd.read_csv('../data/user_base_info.csv')
 
-#for label,value  in user_fea_map.items():
-#    if value[1] == 'float01':
-#        array = random_float_1(all_num)
-#        user_df[label] = array
-#    elif value[1] == 'float':
-#        array = random_float(all_num,1000000)
-#        user_df[label] = array
-#    elif value[1] == 'int':
-#        array = random_int(all_num, rank)
-#        user_df[label] = array
-#
-#a1=(2021,5,1,0,0,0,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
-#a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
-#user_df['user_create_time'] = make_random_time(all_num, a1, a2, False)
-#user_df.to_csv('../data/user_fea.csv', mode='w', index=False)
-#eng = user_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
-#if os.path.exists('../data/user_eng_fea.csv'):
-#    eng.to_csv('../data/user_eng_fea.csv', mode ='a',header=False, index= False)
-#else:    
-#    eng.to_csv('../data/user_eng_fea.csv', mode='w', index=False)
-#    
-#######make item fea
-#multi = 1000
-#item_df = pd.DataFrame()
-#item_df['物品ID'] = item_id * multi        
-#all_num = len(item_id) * multi
-#
-#for label,value  in item_fea_map.items():
-#    if value[1] == 'float01':
-#        array = random_float_1(all_num)
-#        item_df[label] = array
-#    elif value[1] == 'float':
-#        array = random_float(all_num,1000000)
-#        item_df[label] = array
-#    elif value[1] == 'int':
-#        array = random_int(all_num, rank)
-#        item_df[label] = array
+for label,value  in user_fea_map.items():
+    if value[1] == 'float01':
+        array = random_float_1(all_num)
+        user_df[label] = array
+    elif value[1] == 'float':
+        array = random_float(all_num,1000000)
+        user_df[label] = array
+    elif value[1] == 'int':
+        array = random_int(all_num, rank)
+        user_df[label] = array
+
+a1=(2021,5,1,0,0,0,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
+a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
+user_df['user_create_time'] = make_random_time(all_num, a1, a2, False)
+user_df.to_csv('../data/user_fea.csv', mode='w', index=False)
+eng = user_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
+if os.path.exists('../data/user_eng_fea.csv'):
+    eng.to_csv('../data/user_eng_fea.csv', mode ='a',header=False, index= False)
+else:    
+    eng.to_csv('../data/user_eng_fea.csv', mode='w', index=False)
+    
+######make item fea
+multi = 1000
+item_df = pd.DataFrame()
+item_df['物品ID'] = item_id * multi        
+all_num = len(item_id) * multi
+
+for label,value  in item_fea_map.items():
+    if value[1] == 'float01':
+        array = random_float_1(all_num)
+        item_df[label] = array
+    elif value[1] == 'float':
+        array = random_float(all_num,1000000)
+        item_df[label] = array
+    elif value[1] == 'int':
+        array = random_int(all_num, rank)
+        item_df[label] = array
+        
+    elif value[1] == 'string_type':
+        array = [random.choice(['101','100','111','102']) for _ in range(all_num)]
+        item_df[label] = array
 #        
-#    elif value[1] == 'string_type':
-#        array = [random.choice(['101','100','111','102']) for _ in range(all_num)]
-#        item_df[label] = array
-#        
-#a1=(2021,5,1,0,0,0,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
-#a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
-#item_df['item_create_time'] = make_random_time(all_num, a1, a2, False)
-#item_df.to_csv('../data/item_fea.csv', mode='w', index=False)
-#eng = item_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
-#if os.path.exists('../data/item_eng_fea.csv'):
-#    eng.to_csv('../data/item_eng_fea.csv', mode ='a',header=False, index= False)
-#else:    
-#    eng.to_csv('../data/item_eng_fea.csv', mode='w', index=False)
+a1=(2021,5,1,0,0,0,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
+a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
+item_df['item_create_time'] = make_random_time(all_num, a1, a2, False)
+item_df.to_csv('../data/item_fea.csv', mode='w', index=False)
+eng = item_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
+if os.path.exists('../data/item_eng_fea.csv'):
+    eng.to_csv('../data/item_eng_fea.csv', mode ='a',header=False, index= False)
+else:    
+    eng.to_csv('../data/item_eng_fea.csv', mode='w', index=False)
 
 
 ######make interaction fea
@@ -205,39 +205,39 @@ interation_df['interaction_create_time'] = make_random_time(all_num, a1, a2, Fal
 interation_df = interation_df[['用户ID','物品ID','交互类型','物品所在顺序','历史点击次数','历史购买次数','interaction_create_time']]
 interation_df.to_csv('../data/interaction_fea.csv', mode='w', index=False)
 eng = interation_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
-if os.path.exists('../data/interaction_eng_fea.csv'):
-    eng.to_csv('../data/interaction_eng_fea.csv', mode ='a',header=False, index= False)
-else:    
-    eng.to_csv('../data/interaction_eng_fea.csv', mode='w', index=False)
+#if os.path.exists('../data/interaction_eng_fea.csv'):
+#    eng.to_csv('../data/interaction_eng_fea.csv', mode ='a',header=False, index= False)
+#else:    
+eng.to_csv('../data/interaction_eng_fea.csv', mode='w', index=False)
 
 
 
-user_df = pd.read_csv('../data/user_fea.csv')
-item_df = pd.read_csv('../data/item_fea.csv')
-train_df = left_joinFunc(interation_df, user_df, '用户ID')
-#train_df = left_joinFunc(interation_df, user_df)
-
-colname1 = '物品ID'
-colname2 = 'item_create_time'
-
-new_df = pd.DataFrame()
-
-for index, item in tqdm(train_df.iterrows()):
-    choose_list = item_df[item_df[colname1] == item[colname1]]
-    choose_list = choose_list[choose_list['item_create_time'] <= item['interaction_create_time']]
-    
-    if choose_list.shape[0] > 0:
-        latest_one = choose_list.sort_values(by=colname2).head(1)
-    
-        join_dict = Merge(item.to_dict(), latest_one.to_dict())
-    
-        new_df = new_df.append(pd.DataFrame.from_dict(join_dict))
-        
-new_df.to_csv('../data/train_fea.csv', mode ='w',index= False)
-new_df.rename(columns=fea_config['map_eng_name'], inplace=True) 
-if os.path.exists('../data/train_eng_fea.csv'):
-    new_df.to_csv('../data/train_eng_fea.csv', mode ='a',header=False, index= False)
-else:
-    new_df.to_csv('../data/train_eng_fea.csv', mode ='w', index= False)
+#user_df = pd.read_csv('../data/user_fea.csv')
+#item_df = pd.read_csv('../data/item_fea.csv')
+#train_df = left_joinFunc(interation_df, user_df, '用户ID')
+##train_df = left_joinFunc(interation_df, user_df)
+#
+#colname1 = '物品ID'
+#colname2 = 'item_create_time'
+#
+#new_df = pd.DataFrame()
+#
+#for index, item in tqdm(train_df.iterrows()):
+#    choose_list = item_df[item_df[colname1] == item[colname1]]
+#    choose_list = choose_list[choose_list['item_create_time'] <= item['interaction_create_time']]
+#    
+#    if choose_list.shape[0] > 0:
+#        latest_one = choose_list.sort_values(by=colname2).head(1)
+#    
+#        join_dict = Merge(item.to_dict(), latest_one.to_dict())
+#    
+#        new_df = new_df.append(pd.DataFrame.from_dict(join_dict))
+#        
+#new_df.to_csv('../data/train_fea.csv', mode ='w',index= False)
+#new_df.rename(columns=fea_config['map_eng_name'], inplace=True) 
+#if os.path.exists('../data/train_eng_fea.csv'):
+#    new_df.to_csv('../data/train_eng_fea.csv', mode ='a',header=False, index= False)
+#else:
+#    new_df.to_csv('../data/train_eng_fea.csv', mode ='w', index= False)
 
 

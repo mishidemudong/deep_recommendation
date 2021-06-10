@@ -102,7 +102,7 @@ if __name__ == "__main__":
     
     ###############################################user##########################################################
     ######read data
-    user_df = pd.read_csv('/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/user_eng_fea.csv').drop_duplicates(['user_id'])
+    user_df = pd.read_csv('../../data/user_eng_fea.csv').drop_duplicates(['user_id'])
 #    columns = ''
 #    user_df =  get_sqldata(curse, columns)
     
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     redis_curse.set('COLUMNS', str(user_df.columns.tolist()))
     ###############################################item##########################################################
     #####read data
-    item_df = pd.read_csv('/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/item_eng_fea.csv').drop_duplicates(['item_id'])#.drop('UUID', 1)
+    item_df = pd.read_csv('../../data/item_eng_fea.csv').drop_duplicates(['item_id'])#.drop('UUID', 1)
 #    columns = ''
 #    item_df =  get_sqldata(curse, columns)
     #####write
@@ -123,7 +123,7 @@ if __name__ == "__main__":
     redis_curse.set('COLUMNS', str(item_df.columns.tolist()))
     ###############################################interaction##########################################################
     #####read data
-    interaction_df = pd.read_csv('/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/interaction_eng_fea.csv').drop_duplicates()
+    interaction_df = pd.read_csv('../../data/interaction_eng_fea.csv').drop_duplicates()
 #    columns = ''
 #    interaction_df =  get_sqldata(curse, columns)
     #####write
