@@ -11,6 +11,8 @@ from flask import Flask,request,make_response
 from flask_cors import CORS
 import tensorflow as tf
 import json
+
+from split_flow import split
 from rec_predict import RecPredictHandler
 #from recall_main import get_itemidlist
 from utils.load_fea_main import loadalldata
@@ -52,13 +54,25 @@ def rec_score_func():
 #    itemid_list = get_itemidlist('all')
     itemid_list = list(set(sample['item_list']))
     user_list = list(set(sample['user_list']))
+    
+    user_list1, user_list2 = split(user_list, True, 0.5)
+    
+    
     #2 load user_data, item_data, interaction_data
     #  or load user_fea, item_data, interaction_fea
-    pred_data = loadalldata(redis_curse, user_list, itemid_list)
-
+    pred_data1 = loadalldata(redis_curse, user_list1, itemid_list)
+    pred_data2 = loadalldata(redis_curse, user_list2, itemid_list)
+    
+    
     #3predict
-    response = rec_model.predict(sample, pred_data)
+    response1 = rec_model.predict(user_list1, pred_data1)
 #    response = rec_model.predict_test(pred_data)
+    
+    response2 = rec_model.predict(user_list2, pred_data2)
+    
+    
+    
+    response = response1 + response2
 
     if response: 
         res = {

@@ -96,13 +96,13 @@ class RecPredictHandler():
         return pred_model_input
     
 
-    def predict(self, sample, pred_data):
+    def predict(self, user_list, pred_data):
         
         res = []
         
         with self.session.graph.as_default():
             with self.session.as_default():
-                for user_id in sample['user_list']:
+                for user_id in user_list:
                     result = {}
                     result['user_id'] = user_id
                     data = pred_data[pred_data['user_id'] == user_id]
@@ -112,6 +112,8 @@ class RecPredictHandler():
 #                    print(pred)
 #                    result['item_score_list'] = {it_id:str(score[0]) for it_id, score in zip(pred_data['item_id'], pred)}
                     result['item_score_list'] = [(it_id,str(score[0])) for it_id, score in zip(pred_data['item_id'], pred)]
+                    
+                    result['model_type'] = self.config['model_type']
                     res.append(result)
                 
         return res
