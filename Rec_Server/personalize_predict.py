@@ -9,32 +9,37 @@ Created on Tue Jun 15 14:01:24 2021
 '''
 AWS personalize model
 '''
+import boto3
+import json
+import os
 
 class PersonalizePredictHandler():
     """
     """
+
     def __init__(self, config_path):
-        
-        
-        print("build model success")
-    
-        
-    def predict(self, user_list, pred_data):
-        
+        if os.path.exists(config_path):
+            self.config = json.load(open(config_path, 'r'))
+            self.campaignArn = self.config['campaignArn'] #'arn:aws:personalize:us-east-2:005527976057:campaign/movielens_campaign'
+            self.personalizeRt = boto3.client('personalize-runtime')
+        else:
+            print('Build Personalize Handler Faild!!')
+
+    def predict(self, user_list, item_list):
+
         res = []
-        
+
         for user_id in user_list:
             result = {}
             result['user_id'] = user_id
-            data = pred_data[pred_data['user_id'] == user_id]
-            test_model_input = self.preprocess(data)
-#            print(len(test_model_input))
-            pred = self.model.predict(test_model_input, batch_size=256)
-#            print(pred)
-#            result['item_score_list'] = {it_id:str(score[0]) for it_id, score in zip(pred_data['item_id'], pred)}
-            result['item_score_list'] = [(it_id,str(score[0])) for it_id, score in zip(pred_data['item_id'], pred)]
-            
+            response = self.personalizeRt.get_personalized_ranking(
+                campaignArn=self.campaignArn,
+                userId=user_id,
+                inputList=item_list,
+            )
+
+            result['item_score_list'] = [(it_id, index) for index, it_id in enumerate(response['personalizedRanking'])]
             result['model_type'] = 'personalize'
             res.append(result)
-                
+
         return res
