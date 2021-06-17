@@ -73,6 +73,7 @@ def rec_score_func():
     
     
     response = response1 + response2
+    
 
     if response: 
         res = {
