@@ -132,7 +132,7 @@ if __name__ == '__main__':
 #    config_path='{}/best_hyperparams.json'.format(modelpath)
 #
 #    config = json.load(open(config_path,'r'))
-    
+#    
 #    fea_config = pickle.load(open('/media/liang/Project2/推荐系统/git_code/deep_recommendation/fea_config.pkl', 'rb')) 
 #    target = [fea_config['map_eng_name'][fea_config['target'][0]]]
 #    target_name = fea_config['target_name']
@@ -241,16 +241,16 @@ if __name__ == '__main__':
 #                        ])
     
     #predict and evaluate
-    modelpath = './WDLModel'
-#    model.save_weights('./model/my_model.weights')
-    model.load_weights('{}/my_model_best_0.0016.weights'.format(modelpath))
-    pred_ans = model.predict(x_test, batch_size=256)
-    
-#    pred_ans_train = model(test_model_input, training=True)
-    if config['task'] == 'binary':
-        print("test LogLoss", round(log_loss(y_test, pred_ans), 4))
-        print("test AUC", round(roc_auc_score(y_test, pred_ans), 4))
-        
-    elif config['task'] == 'regression':
-        print("test MSE", round(mean_squared_error(y_test, pred_ans), 4))
+#    modelpath = './WDLModel'
+##    model.save_weights('./model/my_model.weights')
+#    model.load_weights('{}/my_model_best_0.0016.weights'.format(modelpath))
+#    pred_ans = model.predict(x_test, batch_size=256)
+#    
+##    pred_ans_train = model(test_model_input, training=True)
+#    if config['task'] == 'binary':
+#        print("test LogLoss", round(log_loss(y_test, pred_ans), 4))
+#        print("test AUC", round(roc_auc_score(y_test, pred_ans), 4))
+#        
+#    elif config['task'] == 'regression':
+#        print("test MSE", round(mean_squared_error(y_test, pred_ans), 4))
     

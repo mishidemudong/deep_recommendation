@@ -8,7 +8,7 @@ Created on Wed May 26 15:28:29 2021
 
 import pandas as pd
 import pickle
-
+import time
 
 def Merge(dict1, dict2): 
     res = {**dict1, **dict2} 

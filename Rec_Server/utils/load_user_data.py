@@ -50,7 +50,14 @@ def get_data_redis(curse_redis, id_list, id_name):
 if __name__ == "__main__":  
     
     import redis
-    pool = redis.ConnectionPool(host='localhost', port=6379, decode_responses=True)
+    redis_user_config = { 
+            'host':'localhost', 
+            'port': 6379, 
+            'db':1,
+            'decode_responses':True
+            }
+    
+    pool = redis.ConnectionPool(**redis_user_config)
     redis_curse = redis.Redis(connection_pool=pool)
     
     
@@ -58,4 +65,4 @@ if __name__ == "__main__":
     
     user_list = sample['user_list']
     
-    user_df = get_data_redis(redis_curse, user_list)
+    user_df = get_data_redis(redis_curse, user_list, 'user_id')

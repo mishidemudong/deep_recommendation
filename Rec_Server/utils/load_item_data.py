@@ -64,5 +64,5 @@ if __name__ == "__main__":
     itemid_list = sample['item_list']
     
     
-    item_df = get_data_redis(redis_curse, itemid_list)
+    item_df = get_data_redis(redis_curse, itemid_list, 'item_id')
     
