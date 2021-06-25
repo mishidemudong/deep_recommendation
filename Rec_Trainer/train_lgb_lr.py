@@ -17,6 +17,13 @@ from deepctr.feature_column import SparseFeat, DenseFeat, get_feature_names
 import time
 import pickle, json
 
+fea_category = {
+    "":[],
+    "":[],
+    "":[],
+    "":[]
+}
+
 
 def time2stamp(tss1):
     #    print(tss1)
