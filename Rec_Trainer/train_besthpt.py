@@ -128,54 +128,6 @@ class EvaluatorRe(tf.keras.callbacks.Callback):
 
 if __name__ == '__main__':
     
-#    modelpath = './WDLModel'
-#    config_path='{}/best_hyperparams.json'.format(modelpath)
-#
-#    config = json.load(open(config_path,'r'))
-#    
-#    fea_config = pickle.load(open('/media/liang/Project2/推荐系统/git_code/deep_recommendation/fea_config.pkl', 'rb')) 
-#    target = [fea_config['map_eng_name'][fea_config['target'][0]]]
-#    target_name = fea_config['target_name']
-#    train_data_path = '/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/train_eng_fea.csv'
-#    data = pd.read_csv(train_data_path)#.sample(frac=0.1, replace=False, random_state=5, axis=0)
-#    
-#    data[target] = [target_name[item[0]][1] for item in list(data[target].values)]
-#    
-#    fea_model = pickle.load(open(config['fea_model_path'], 'rb')) 
-#    data[fea_model['sparse_features']] = data[fea_model['sparse_features']].fillna('-1', )
-#    data[fea_model['dense_features']] = data[fea_model['dense_features']].fillna(0, )
-#    
-#    feature_names = get_feature_names(fea_model['linear_feature_columns'] + fea_model['dnn_feature_columns'])
-#    
-#    
-#    for feat in fea_model['sparse_features']:
-#        print(feat)
-#        data[feat] = fea_model['sparse_fea_model'][feat].transform(data[feat])
-#        
-#    mms = fea_model['dense_fea_model']
-#    data[fea_model['dense_features']] = mms.transform(data[fea_model['dense_features']])
-#    
-#    sparse_fea = {}
-#    for feat in sparse_features:
-#        lbe = LabelEncoder()
-#        data[feat] = lbe.fit_transform(data[feat])
-#        sparse_fea[feat] = lbe
-#    mms = MinMaxScaler(feature_range=(0, 1))
-#    data[dense_features] = mms.fit_transform(data[dense_features])
-#    config['fea_model_path'] = './featuremodel/fea_model.pkl'
-#    
-#    
-#    fea_model['sparse_fea_model'] = sparse_fea
-#    fea_model['dense_fea_model'] = mms
-#        
-#    
-#    train, test = train_test_split(data, test_size=0.2, random_state=2020)
-#    train_model_input = {name:train[name] for name in feature_names}
-#    test_model_input = {name:test[name] for name in feature_names}
-#    
-#    x_train, y_train = train_model_input, train[target].values
-#    x_test, y_test = test_model_input, test[target].values
-    
     
     ''''''
 

@@ -102,35 +102,37 @@ if __name__ == "__main__":
     
     ###############################################user##########################################################
     ######read data
-    user_df = pd.read_csv('../../data/user_eng_fea.csv').drop_duplicates(['user_id'])
-#    columns = ''
-#    user_df =  get_sqldata(curse, columns)
-    
-    #####write
-    pool = redis.ConnectionPool(**redis_user_config)
-    redis_curse = redis.Redis(connection_pool=pool)
+#    user_df = pd.read_csv('../../data/user_eng_fea.csv').drop_duplicates(['user_id'])
+##    columns = ''
+##    user_df =  get_sqldata(curse, columns)
+#    
+#    #####write
+#    pool = redis.ConnectionPool(**redis_user_config)
+#    redis_curse = redis.Redis(connection_pool=pool)
+#    
 #    writedf2redis(redis_curse, user_df, 'user_id')
-    redis_curse.set('COLUMNS', str(user_df.columns.tolist()))
+#    redis_curse.set('COLUMNS', str(user_df.columns.tolist()))
     ###############################################item##########################################################
     #####read data
-    item_df = pd.read_csv('../../data/item_eng_fea.csv').drop_duplicates(['item_id'])#.drop('UUID', 1)
+#    item_df = pd.read_csv('../../data/item_eng_fea.csv').drop_duplicates(['item_id'])#.drop('UUID', 1)
 #    columns = ''
 #    item_df =  get_sqldata(curse, columns)
     #####write
-    pool = redis.ConnectionPool(**redis_item_config)
-    redis_curse = redis.Redis(connection_pool=pool)
+#    pool = redis.ConnectionPool(**redis_item_config)
+#    redis_curse = redis.Redis(connection_pool=pool)
 #    writedf2redis(redis_curse, item_df, 'item_id')
-    redis_curse.set('COLUMNS', str(item_df.columns.tolist()))
-    ###############################################interaction##########################################################
-    #####read data
-    interaction_df = pd.read_csv('../../data/interaction_eng_fea.csv').drop_duplicates()
+#    redis_curse.set('COLUMNS', str(item_df.columns.tolist()))
+    
+#    ###############################################interaction##########################################################
+#    #####read data
+    interaction_df = pd.read_csv('../../data/interaction_eng_fea.csv').drop_duplicates('user_id')
 #    columns = ''
 #    interaction_df =  get_sqldata(curse, columns)
 
     #####write
     pool = redis.ConnectionPool(**redis_interaction_config)
     redis_curse = redis.Redis(connection_pool=pool)
-#    interaction_keys = writedf2redis2keys(redis_curse, interaction_df, 'user_id', 'item_id')
+    interaction_keys = writedf2redis2keys(redis_curse, interaction_df, 'user_id', 'item_id')
     redis_curse.set('COLUMNS', str(interaction_df.columns.tolist()))
     
     

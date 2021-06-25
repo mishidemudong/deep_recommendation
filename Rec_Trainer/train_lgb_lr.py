@@ -15,49 +15,33 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
 from deepctr.feature_column import SparseFeat, DenseFeat, get_feature_names
 import time
-import pickle,json
+import pickle, json
 
-#from slackclient import SlackClient
-#def slack_message(message, channel):
-#    token = 'your_token'
-#    sc = SlackClient(token)
-#    sc.api_call('chat.postMessage', channel=channel, 
-#                text=message, username='My Sweet Bot',
-#                icon_emoji=':upside_down_face:')
-
-category  = {
-    '':[],
-    '':[],
-    '':[],
-    '':[]
-}
 
 def time2stamp(tss1):
-#    print(tss1)
+    #    print(tss1)
     timeArray = time.strptime(tss1, "%Y-%m-%d %H:%M:%S")
     timeStamp = int(time.mktime(timeArray))
-    
+
     return timeStamp
 
+
 modelpath = './WDLModel'
-config_path='{}/best_hyperparams.json'.format(modelpath)
+config_path = '{}/best_hyperparams.json'.format(modelpath)
 
-config = json.load(open(config_path,'r'))
+config = json.load(open(config_path, 'r'))
 
-fea_config = pickle.load(open('/media/liang/Project2/推荐系统/git_code/deep_recommendation/fea_config.pkl', 'rb')) 
+fea_config = pickle.load(open('/media/liang/Project2/推荐系统/git_code/deep_recommendation/fea_config.pkl', 'rb'))
 target = [fea_config['map_eng_name'][fea_config['target'][0]]]
 target_name = fea_config['target_name']
 train_data_path = '/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/train_eng_fea.csv'
-data = pd.read_csv(train_data_path)#.sample(frac=0.1, replace=False, random_state=5, axis=0)
+data = pd.read_csv(train_data_path)  # .sample(frac=0.1, replace=False, random_state=5, axis=0)
 
 data[target] = [target_name[item[0]][1] for item in list(data[target].values)]
 
-    
-fea_model = pickle.load(open(config['fea_model_savepath'], 'rb')) 
+fea_model = pickle.load(open(config['fea_model_savepath'], 'rb'))
 data[fea_model['sparse_features']] = data[fea_model['sparse_features']].fillna('-1', )
 data[fea_model['dense_features']] = data[fea_model['dense_features']].fillna(0, )
-
-
 
 sparse_fea = {}
 for feat in fea_model['sparse_features']:
@@ -65,41 +49,38 @@ for feat in fea_model['sparse_features']:
     data[feat] = lbe.fit_transform(data[feat])
     lbe.classes_ = np.append(lbe.classes_, '<unknow>')
     sparse_fea[feat] = lbe
-    
 
-time_fea = ["interaction_create_time", "user_create_time", "item_create_time"]    
+time_fea = ["interaction_create_time", "user_create_time", "item_create_time"]
 
 for fea in time_fea:
-    data[fea] = data[fea].map(lambda x:time2stamp(x))
-    
-    
-    
+    data[fea] = data[fea].map(lambda x: time2stamp(x))
+
 mms = MinMaxScaler(feature_range=(0, 1))
 data[fea_model['dense_features']] = mms.fit_transform(data[fea_model['dense_features']])
 train, test = train_test_split(data, test_size=0.2, random_state=2020)
 
 # load or create your dataset
-#modelpath = './WDLModel'
-#config_path='{}/best_hyperparams.json'.format(modelpath)
-#config = json.load(open(config_path,'r'))
-#fea_model = pickle.load(open(config['fea_model_savepath'], 'rb')) 
-#train_data_savepath = './data/train_test_split.pkl'
-#split_data = pickle.load(open(train_data_savepath, 'rb'))
-#X_train, y_train, X_test, y_test = split_data['x_train'], split_data['y_train'], split_data['x_test'], split_data['y_test']
-#y_train = [item[0] for item in y_train]
-#y_test = [item[0] for item in y_test]
+# modelpath = './WDLModel'
+# config_path='{}/best_hyperparams.json'.format(modelpath)
+# config = json.load(open(config_path,'r'))
+# fea_model = pickle.load(open(config['fea_model_savepath'], 'rb'))
+# train_data_savepath = './data/train_test_split.pkl'
+# split_data = pickle.load(open(train_data_savepath, 'rb'))
+# X_train, y_train, X_test, y_test = split_data['x_train'], split_data['y_train'], split_data['x_test'], split_data['y_test']
+# y_train = [item[0] for item in y_train]
+# y_test = [item[0] for item in y_test]
 y_train = train[target]  # training label
-y_test = test[target]    # testing label
+y_test = test[target]  # testing label
 X_train = train.drop(target, axis=1)  # training dataset
 X_test = test.drop(target, axis=1)  # testing dataset
 
 # create dataset for lightgbm
-lgb_train = lgb.Dataset(X_train, y_train, free_raw_data = False)
-lgb_eval = lgb.Dataset(X_test, y_test, reference=lgb_train, free_raw_data = False)
+lgb_train = lgb.Dataset(X_train, y_train, free_raw_data=False)
+lgb_eval = lgb.Dataset(X_test, y_test, reference=lgb_train, free_raw_data=False)
 
 # specify your configurations as a dict
 depth = 2
-num_leaves = 2**depth - 1
+num_leaves = 2 ** depth - 1
 
 params = {'boosting_type': 'dart',
           'objective': 'regression',
@@ -119,8 +100,7 @@ params = {'boosting_type': 'dart',
           'max_drop': 200,
           'seed': 100,
           'silent': False
-         }
-
+          }
 
 print('Start training...')
 # train
@@ -129,12 +109,12 @@ gbm = lgb.train(params,
                 num_boost_round=100,
                 valid_sets=lgb_train)
 
-#num_boost_round = 1000
-#early_stopping_rounds = 10
-#nfold = 5
-#evals_result = {}
+# num_boost_round = 1000
+# early_stopping_rounds = 10
+# nfold = 5
+# evals_result = {}
 #
-#gbm = lgb.cv(params,
+# gbm = lgb.cv(params,
 #               train_set = lgb_train,
 #               num_boost_round = num_boost_round,
 #               nfold = nfold,
@@ -142,56 +122,51 @@ gbm = lgb.train(params,
 #               verbose_eval = True
 #               )
 
-#slack_message("Cross validation completed!", 'channel')
 
 print('Save model...')
 # save model to file
 gbm.save_model('model.txt')
 
-print('Start predicting...')
-# predict and get data on leaves, training data
-y_pred = gbm.predict(X_train,pred_leaf=True)
-
-# feature transformation and write result
-print('Writing transformed training data')
-transformed_training_matrix = np.zeros([len(y_pred),len(y_pred[0]) * num_leaves],dtype=np.int64)
-for i in range(0,len(y_pred)):
-	temp = np.arange(len(y_pred[0])) * num_leaves - 1 + np.array(y_pred[i])
-	transformed_training_matrix[i][temp] += 1
-
-#for i in range(0,len(y_pred)):
-#	for j in range(0,len(y_pred[i])):
-#		transformed_training_matrix[i][j * num_leaves + y_pred[i][j]-1] = 1
-
-# predict and get data on leaves, testing data
-y_pred = gbm.predict(X_test,pred_leaf=True)
-
-# feature transformation and write result
-print('Writing transformed testing data')
-transformed_testing_matrix = np.zeros([len(y_pred),len(y_pred[0]) * num_leaves],dtype=np.int64)
-for i in range(0,len(y_pred)):
-	temp = np.arange(len(y_pred[0])) * num_leaves - 1 + np.array(y_pred[i])
-	transformed_testing_matrix[i][temp] += 1
-
-#for i in range(0,len(y_pred)):
-#	for j in range(0,len(y_pred[i])):
-#		transformed_testing_matrix[i][j * num_leaves + y_pred[i][j]-1] = 1
-
 print('Calculate feature importances...')
 # feature importances
-print('Feature importances:', list(gbm.feature_importance()))
-print('Feature importances:', list(gbm.feature_importance("gain")))
+# print('Feature importances:', list(gbm.feature_importance()))
+# print('Feature importances:', list(gbm.feature_importance("gain")))
 
-
-
-
-lgb.plot_importance(gbm, max_num_features = 30, importance_type='split')
+lgb.plot_importance(gbm, max_num_features=30, importance_type='split')
 importance = pd.DataFrame()
 importance['Feature'] = X_train.columns.values
-importance['ImportanceWeight'] = gbm.feature_importance(importance_type = 'split')
-importance['ImportanceGain'] = gbm.feature_importance(importance_type = 'gain')
+importance['ImportanceWeight'] = gbm.feature_importance(importance_type='split')
+importance['ImportanceGain'] = gbm.feature_importance(importance_type='gain')
 
-importance.sort_values(by = 'ImportanceWeight', ascending = False, inplace = True)
+importance.sort_values(by='ImportanceWeight', ascending=False, inplace=True)
 importance.head()
 
 
+def predict():
+    print('Start predicting...')
+    y_pred = gbm.predict(X_train, pred_leaf=True)
+
+    #     feature transformation and write result
+    print('Writing transformed training data')
+    transformed_training_matrix = np.zeros([len(y_pred), len(y_pred[0]) * num_leaves], dtype=np.int64)
+    for i in range(0, len(y_pred)):
+        temp = np.arange(len(y_pred[0])) * num_leaves - 1 + np.array(y_pred[i])
+        transformed_training_matrix[i][temp] += 1
+
+    for i in range(0, len(y_pred)):
+        for j in range(0, len(y_pred[i])):
+            transformed_training_matrix[i][j * num_leaves + y_pred[i][j] - 1] = 1
+
+    #     predict and get data on leaves, testing data
+    y_pred = gbm.predict(X_test, pred_leaf=True)
+
+    #     feature transformation and write result
+    print('Writing transformed testing data')
+    transformed_testing_matrix = np.zeros([len(y_pred), len(y_pred[0]) * num_leaves], dtype=np.int64)
+    for i in range(0, len(y_pred)):
+        temp = np.arange(len(y_pred[0])) * num_leaves - 1 + np.array(y_pred[i])
+        transformed_testing_matrix[i][temp] += 1
+
+    for i in range(0, len(y_pred)):
+        for j in range(0, len(y_pred[i])):
+            transformed_testing_matrix[i][j * num_leaves + y_pred[i][j] - 1] = 1
