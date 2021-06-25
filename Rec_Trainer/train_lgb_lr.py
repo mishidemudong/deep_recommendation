@@ -25,6 +25,13 @@ import pickle,json
 #                text=message, username='My Sweet Bot',
 #                icon_emoji=':upside_down_face:')
 
+category  = {
+    '':[],
+    '':[],
+    '':[],
+    '':[]
+}
+
 def time2stamp(tss1):
 #    print(tss1)
     timeArray = time.strptime(tss1, "%Y-%m-%d %H:%M:%S")

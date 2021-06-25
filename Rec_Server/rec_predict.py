@@ -112,10 +112,37 @@ class RecPredictHandler():
 #                    print(pred)
 #                    result['item_score_list'] = {it_id:str(score[0]) for it_id, score in zip(pred_data['item_id'], pred)}
                     result['item_score_list'] = [(it_id,str(score[0])) for it_id, score in zip(pred_data['item_id'], pred)]
-                    
                     result['model_type'] = self.config['model_type']
                     res.append(result)
                 
+        return res
+
+    def feature_importance_choose(self, pred_data, category):
+        tag_array = []
+        item_tag_array = self.feature_importance_choose(pred_data)
+        return tag_array
+
+    def predict2(self, user_list, pred_data):
+
+        res = []
+
+        with self.session.graph.as_default():
+            with self.session.as_default():
+                for user_id in user_list:
+                    result = {}
+                    result['user_id'] = user_id
+                    data = pred_data[pred_data['user_id'] == user_id]
+                    test_model_input = self.preprocess(data)
+                    #                    print(len(test_model_input))
+                    pred = self.model.predict(test_model_input, batch_size=256)
+                    #                    print(pred)
+                    #                    result['item_score_list'] = {it_id:str(score[0]) for it_id, score in zip(pred_data['item_id'], pred)}
+                    result['item_score_list'] = [(it_id, str(score[0]), category) for it_id, score, category in
+                                                 zip(pred_data['item_id'], pred, pred_data['item_category'])]
+                    result['item_tag_importance'] = self.config['fea_importance']
+                    result['model_type'] = self.config['model_type']
+                    res.append(result)
+
         return res
 
     def predict_test(self, pred_data):
