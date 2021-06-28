@@ -175,18 +175,35 @@ importance['ImportanceGain'] = gbm.feature_importance(importance_type='gain')
 importance.sort_values(by='ImportanceWeight', ascending=False, inplace=True)
 importance.head()
 
+
+fea_importance = {'Currency':[],
+                  'InvestPortfolio':[],
+                  'Plate':[]
+                  }
+
 for index, item in importance.iterrows():
     if item['Feature'] in fea_category['Currency']:
         # fea_category['Currency'].append((item['Feature'], item['ImportanceGain']))
-        fea_category['Currency'].append(item['Feature'])
+        fea_importance['Currency'].append(item['Feature'])
 
     if item['Feature'] in fea_category['InvestPortfolio']:
         # fea_category['Currency'].append((item['Feature'], item['ImportanceGain']))
-        fea_category['InvestPortfolio'].append(item['Feature'])
+        fea_importance['InvestPortfolio'].append(item['Feature'])
 
     if item['Feature'] in fea_category['Plate']:
         # fea_category['Currency'].append((item['Feature'], item['ImportanceGain']))
-        fea_category['Plate'].append(item['Feature'])
+        fea_importance['Plate'].append(item['Feature'])
+
+
+config_path = './recmodel/my_model_best_0.0007.json'
+config = json.load(open(config_path,'r'))
+config['fea_importance'] = fea_importance
+
+fea_config_path = './recmodel/my_model_best_0.0007_fea_importance.json'
+with open(config_path,'w') as file_obj:
+    json.dump(config,file_obj)
+file_obj.close()
+
 
 
 def predict():

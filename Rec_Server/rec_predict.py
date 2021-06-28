@@ -138,7 +138,7 @@ class RecPredictHandler():
                     #                    print(pred)
                     #                    result['item_score_list'] = {it_id:str(score[0]) for it_id, score in zip(pred_data['item_id'], pred)}
                     result['item_score_list'] = [(it_id, str(score[0]), category) for it_id, score, category in
-                                                 zip(pred_data['item_id'], pred, pred_data['item_category'])]
+                                                 zip(pred_data['item_id'], pred, pred_data['ITEM_CATEGORY'])]
                     result['model_type'] = self.config['model_type']
                     res.append(result)
 

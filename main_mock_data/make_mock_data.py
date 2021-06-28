@@ -96,7 +96,7 @@ def random_float_1(num):
 #KYC_level = ['A','B','C']
 #kyc_country = ['USA', 'JAPAN', 'ITELY', 'UK']
 #if_test = [True, False]
-#rank = 600
+rank = 600
 #user_df = pd.DataFrame()
 #user_df['用户ID'] = user_id
 #user_df = left_joinFunc2(user_df, userid_df, '用户ID', 'user_id')
@@ -137,81 +137,83 @@ def random_float_1(num):
 #    eng.to_csv('../data/user_eng_fea.csv', mode='w', index=False)
 #    
 #######make item fea
-#multi = 1000
-#item_df = pd.DataFrame()
-#item_df['物品ID'] = item_id * multi        
-#all_num = len(item_id) * multi
-#
-#for label,value  in item_fea_map.items():
-#    if value[1] == 'float01':
-#        array = random_float_1(all_num)
-#        item_df[label] = array
-#    elif value[1] == 'float':
-#        array = random_float(all_num,1000000)
-#        item_df[label] = array
-#    elif value[1] == 'int':
-#        array = random_int(all_num, rank)
-#        item_df[label] = array
-#        
-#    elif value[1] == 'string_type':
-#        array = [random.choice(['101','100','111','102']) for _ in range(all_num)]
-#        item_df[label] = array
-##        
-#a1=(2021,5,1,0,0,0,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
-#a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
-#item_df['item_create_time'] = make_random_time(all_num, a1, a2, False)
-#item_df.to_csv('../data/item_fea.csv', mode='w', index=False)
-#eng = item_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
-#if os.path.exists('../data/item_eng_fea.csv'):
-#    eng.to_csv('../data/item_eng_fea.csv', mode ='a',header=False, index= False)
-#else:    
-#    eng.to_csv('../data/item_eng_fea.csv', mode='w', index=False)
-#
-#
-######make interaction fea
-multi = 100
-interation_df = pd.DataFrame()
-#interation_df['物品ID'] = item_id * multi
-#all_num = len(item_id) * multi
-#interation_df['用户ID'] = [random.choice(user_id) for _ in range(all_num)]
-user_id_array = []
-item_id_array = []
-for user in tqdm(user_id):
-    item_id_array.extend(item_id)
-    user_id_array.extend([user] * len(item_id))
-interation_df['用户ID'] = user_id_array
-interation_df['物品ID'] = item_id_array        
-all_num = len(item_id_array)    
+multi = 1000
+item_df = pd.DataFrame()
+item_df['物品ID'] = item_id * multi        
+all_num = len(item_id) * multi
 
-
-for label,value in tqdm(interaction_fea_map.items()):
-
+for label,value  in item_fea_map.items():
     if value[1] == 'float01':
         array = random_float_1(all_num)
-        interation_df[label] = array
+        item_df[label] = array
     elif value[1] == 'float':
         array = random_float(all_num,1000000)
-        interation_df[label] = array
-
-    elif 'int' in value[1]:
-        array = random_int(all_num, int(value[1][-2:]))
-        interation_df[label] = array
+        item_df[label] = array
+    elif value[1] == 'int':
+        array = random_int(all_num, rank)
+        item_df[label] = array
         
     elif value[1] == 'string_type':
-        target = list(target_name.keys())
-        array = [random.choice(target) for _ in range(all_num)]
-        interation_df[label] = array
-        
-a1=(2021,5,1,0,0,1,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
+        array = [random.choice(['101','100','111','102']) for _ in range(all_num)]
+        item_df[label] = array
+
+item_df['ITEM_CATEGORY'] = [random.choice(['Currency','InvestPortfolio','Plate']) for _ in range(all_num)]
+
+a1=(2021,5,1,0,0,0,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
 a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
-interation_df['interaction_create_time'] = make_random_time(all_num, a1, a2, False)
-interation_df = interation_df[['用户ID','物品ID','交互类型','物品所在顺序','历史点击次数','历史购买次数','interaction_create_time']]
-interation_df.to_csv('../data/interaction_fea.csv', mode='w', index=False)
-eng = interation_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
+item_df['item_create_time'] = make_random_time(all_num, a1, a2, False)
+item_df.to_csv('../data/item_fea.csv', mode='w', index=False)
+eng = item_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
+if os.path.exists('../data/item_eng_fea.csv'):
+    eng.to_csv('../data/item_eng_fea.csv', mode ='a',header=False, index= False)
+else:    
+    eng.to_csv('../data/item_eng_fea.csv', mode='w', index=False)
+
+
+######make interaction fea
+#multi = 100
+#interation_df = pd.DataFrame()
+##interation_df['物品ID'] = item_id * multi
+##all_num = len(item_id) * multi
+##interation_df['用户ID'] = [random.choice(user_id) for _ in range(all_num)]
+#user_id_array = []
+#item_id_array = []
+#for user in tqdm(user_id):
+#    item_id_array.extend(item_id)
+#    user_id_array.extend([user] * len(item_id))
+#interation_df['用户ID'] = user_id_array
+#interation_df['物品ID'] = item_id_array        
+#all_num = len(item_id_array)    
+#
+#
+#for label,value in tqdm(interaction_fea_map.items()):
+#
+#    if value[1] == 'float01':
+#        array = random_float_1(all_num)
+#        interation_df[label] = array
+#    elif value[1] == 'float':
+#        array = random_float(all_num,1000000)
+#        interation_df[label] = array
+#
+#    elif 'int' in value[1]:
+#        array = random_int(all_num, int(value[1][-2:]))
+#        interation_df[label] = array
+#        
+#    elif value[1] == 'string_type':
+#        target = list(target_name.keys())
+#        array = [random.choice(target) for _ in range(all_num)]
+#        interation_df[label] = array
+#        
+#a1=(2021,5,1,0,0,1,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
+#a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
+#interation_df['interaction_create_time'] = make_random_time(all_num, a1, a2, False)
+#interation_df = interation_df[['用户ID','物品ID','交互类型','物品所在顺序','历史点击次数','历史购买次数','interaction_create_time']]
+#interation_df.to_csv('../data/interaction_fea.csv', mode='w', index=False)
+#eng = interation_df.rename(columns=fea_config['map_eng_name'], inplace=False) 
 #if os.path.exists('../data/interaction_eng_fea.csv'):
 #    eng.to_csv('../data/interaction_eng_fea.csv', mode ='a',header=False, index= False)
 #else:    
-eng.to_csv('../data/interaction_eng_fea.csv', mode='w', index=False)
+#eng.to_csv('../data/interaction_eng_fea.csv', mode='w', index=False)
 #
 #
 #
