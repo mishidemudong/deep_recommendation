@@ -18,10 +18,37 @@ import time
 import pickle, json
 
 fea_category = {
-    "":[],
-    "":[],
-    "":[],
-    "":[]
+    "Currency":["DAY_PRICE_CHANGE_RATE","DAY_PRICE_CHANGE_RATE_RANK",
+                "WEEK_PRICE_CHANGE_RATE",
+                "WEEK_PRICE_CHANGE_RATE_RANK",
+                "DAY_VOLUME_CHANGE_RATE",
+                "DAY_VOLUME_CHANGE_RATE_RANK",
+                "WEEK_VOLUME_CHANGE_RATE",
+                "WEEK_VOLUME_CHANGE_RATE_RANK",
+                "WEEK_CMC_SEARCH_HOT_RANK",
+                "CURRENCY_LIKES",
+                "CURRENCY_LIKES_RANKING",
+                "CURRENCY_LIKES_RANKING_RISES_24_HOUR",
+                "CURRENCY_LIKES_RANKING_RISES_24_HOUR_RANK",
+                "CURRENCY_CAP",
+                "CURRENCY_CAP_RANK",
+                "CURRENCY_CATEGORY"],
+    "InvestPortfolio":["INVEST_PROFIT_RATE_24_HOUR",
+                        "INVEST_PROFIT_RATE_24_HOUR_RANK",
+                        "INVEST_PROFIT_RATE_1_WEEK",
+                        "INVEST_PROFIT_RATE_1_WEEK_RANK",
+                        "INVEST_PROFIT_RATE_12_MONTH",
+                        "INVEST_PROFIT_RATE_12_MONTH_RANK",
+                        "AVERAGE_COLLECT",
+                        "AVERAGE_COLLECT_RANK",
+                        "INVEST_PROFIT_USED",
+                        "INVEST_PROFIT_USED_RANK"],
+    "Plate":[           "PLATE_CAP_CHANGE_RATE_1_DAY",
+                        "PLATE_CAP_CHANGE_RATE_1_DAY_RANK",
+                        "PLATE_CAP_CHANGE_RATE_1_WEEK",
+                        "PLATE_CAP_CHANGE_RATE_1_WEEK_RANK",
+                        "PLAT_COLLECT",
+                        "PLAT_COLLECT_RANK"]
 }
 
 
@@ -147,6 +174,19 @@ importance['ImportanceGain'] = gbm.feature_importance(importance_type='gain')
 
 importance.sort_values(by='ImportanceWeight', ascending=False, inplace=True)
 importance.head()
+
+for index, item in importance.iterrows():
+    if item['Feature'] in fea_category['Currency']:
+        # fea_category['Currency'].append((item['Feature'], item['ImportanceGain']))
+        fea_category['Currency'].append(item['Feature'])
+
+    if item['Feature'] in fea_category['InvestPortfolio']:
+        # fea_category['Currency'].append((item['Feature'], item['ImportanceGain']))
+        fea_category['InvestPortfolio'].append(item['Feature'])
+
+    if item['Feature'] in fea_category['Plate']:
+        # fea_category['Currency'].append((item['Feature'], item['ImportanceGain']))
+        fea_category['Plate'].append(item['Feature'])
 
 
 def predict():

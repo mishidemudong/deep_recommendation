@@ -139,11 +139,10 @@ class RecPredictHandler():
                     #                    result['item_score_list'] = {it_id:str(score[0]) for it_id, score in zip(pred_data['item_id'], pred)}
                     result['item_score_list'] = [(it_id, str(score[0]), category) for it_id, score, category in
                                                  zip(pred_data['item_id'], pred, pred_data['item_category'])]
-                    result['item_tag_importance'] = self.config['fea_importance']
                     result['model_type'] = self.config['model_type']
                     res.append(result)
 
-        return res
+        return res, self.config['fea_importance']
 
     def predict_test(self, pred_data):
         res = {'user_id': pred_data['user_id'][0]}

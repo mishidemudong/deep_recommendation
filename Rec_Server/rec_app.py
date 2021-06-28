@@ -65,10 +65,10 @@ def rec_score_func():
     
     
     #3predict
-    response1 = rec_model.predict(user_list1, pred_data1)
+    response1, item_tag_importance = rec_model.predict(user_list1, pred_data1)
 #    response = rec_model.predict_test(pred_data)
     
-    response2 = rec_model.predict(user_list2, pred_data2)
+    response2, item_tag_importance = rec_model.predict(user_list2, pred_data2)
     
     
     
@@ -78,6 +78,7 @@ def rec_score_func():
     if response: 
         res = {
                 'errorcode': 0,
+                'item_tag_importance': item_tag_importance,
                 'response': response
             }
     else:
