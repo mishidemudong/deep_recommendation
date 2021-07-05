@@ -10,7 +10,7 @@ from utils.db_utils import build_redis_connect
     
 redis_curse = build_redis_connect()
 
-sample = {"user_list":["20200326092704"],  "item_list":["KAT" ]}
+sample = {"user_list":['60b4cdc47789d200098dc87d', '60b4cc777789d200098dc879'],  "item_list":["KAT" ]}
 
 itemid_list = sample['item_list']
 user_list = sample['user_list']

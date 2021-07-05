@@ -137,6 +137,7 @@ class RecPredictHandler():
                     pred = self.model.predict(test_model_input, batch_size=256)
                     #                    print(pred)
                     #                    result['item_score_list'] = {it_id:str(score[0]) for it_id, score in zip(pred_data['item_id'], pred)}
+                    print("ITEM_CATEGORY", pred_data['ITEM_CATEGORY'])
                     result['item_score_list'] = [(it_id, str(score[0]), category) for it_id, score, category in
                                                  zip(pred_data['item_id'], pred, pred_data['ITEM_CATEGORY'])]
                     result['model_type'] = self.config['model_type']

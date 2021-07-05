@@ -151,17 +151,17 @@ if __name__ == '__main__':
     best_config['best_model_path'] = './recmodel'
     model = buildmodel(best_config)
 #    
-#    print("===================================")
-#    print(config)
-#    if best_config['task'] == 'binary':
-#        evaluator = EvaluatorB(best_config)
-#    elif best_config['task'] == 'regression':
-#        evaluator = EvaluatorRe(best_config)
-#    
-#    save_dir = './tensorboard'
-#    tensorboard_callback = tf.keras.callbacks.TensorBoard(
-#        log_dir=os.path.join(save_dir, 'tf_logs'), histogram_freq=0, write_graph=False,
-#        write_grads=False, update_freq=320)
+    print("===================================")
+    print(config)
+    if best_config['task'] == 'binary':
+        evaluator = EvaluatorB(best_config)
+    elif best_config['task'] == 'regression':
+        evaluator = EvaluatorRe(best_config)
+    
+    save_dir = './tensorboard'
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(
+        log_dir=os.path.join(save_dir, 'tf_logs'), histogram_freq=0, write_graph=False,
+        write_grads=False, update_freq=320)
     
     
 #    AdamW = extend_with_weight_decay(Adam, 'AdamW')
@@ -174,28 +174,28 @@ if __name__ == '__main__':
 ##        grad_accum_steps=128
 #    )
     
-#    optimizer = Adam(best_config['all_params']['lrate'])
-#
-#    if config['task'] == 'binary':
-#        model.compile(optimizer, "binary_crossentropy",
-#                      metrics=['binary_crossentropy', 'accuracy'], 
-#                      )
-#    elif config['task'] == 'regression':
-#        model.compile(optimizer, "mse", metrics=['mse'], )
-#    
-#    
-#    history = model.fit(x_train, y_train,
-#                        batch_size=best_config['all_params']['batch_size'],
-#                        epochs=10, verbose=2, validation_split=0.2, 
-#                        callbacks=[
-#                        evaluator,
-#                        tensorboard_callback,
-#                        ])
+    optimizer = Adam(best_config['all_params']['lrate'])
+
+    if config['task'] == 'binary':
+        model.compile(optimizer, "binary_crossentropy",
+                      metrics=['binary_crossentropy', 'accuracy'], 
+                      )
+    elif config['task'] == 'regression':    
+        model.compile(optimizer, "mse", metrics=['mse'], )
     
-    #predict and evaluate
+    
+    history = model.fit(x_train, y_train,
+                        batch_size=best_config['all_params']['batch_size'],
+                        epochs=10, verbose=2, validation_split=0.2, 
+                        callbacks=[
+                        evaluator,
+                        tensorboard_callback,
+                        ])
+    
+    ##predict and evaluate
 #    modelpath = './WDLModel'
 ##    model.save_weights('./model/my_model.weights')
-#    model.load_weights('{}/my_model_best_0.0016.weights'.format(modelpath))
+#    model.load_weights('{}/my_model_best_0.0029.weights'.format(modelpath))
 #    pred_ans = model.predict(x_test, batch_size=256)
 #    
 ##    pred_ans_train = model(test_model_input, training=True)

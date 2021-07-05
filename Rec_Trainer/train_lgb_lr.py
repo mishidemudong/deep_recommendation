@@ -84,7 +84,7 @@ for feat in fea_model['sparse_features']:
     lbe.classes_ = np.append(lbe.classes_, '<unknow>')
     sparse_fea[feat] = lbe
 
-time_fea = ["interaction_create_time", "user_create_time", "item_create_time"]
+time_fea = ["interaction_create_time".upper(), "user_create_time".upper(), "item_create_time".upper()]
 
 for fea in time_fea:
     data[fea] = data[fea].map(lambda x: time2stamp(x))
@@ -143,19 +143,6 @@ gbm = lgb.train(params,
                 num_boost_round=100,
                 valid_sets=lgb_train)
 
-# num_boost_round = 1000
-# early_stopping_rounds = 10
-# nfold = 5
-# evals_result = {}
-#
-# gbm = lgb.cv(params,
-#               train_set = lgb_train,
-#               num_boost_round = num_boost_round,
-#               nfold = nfold,
-#               early_stopping_rounds = early_stopping_rounds,
-#               verbose_eval = True
-#               )
-
 
 print('Save model...')
 # save model to file
@@ -195,11 +182,11 @@ for index, item in importance.iterrows():
         fea_importance['Plate'].append(item['Feature'])
 
 
-config_path = './recmodel/my_model_best_0.0007.json'
+config_path = './recmodel/my_model_best_0.0142.json'
 config = json.load(open(config_path,'r'))
 config['fea_importance'] = fea_importance
 
-fea_config_path = './recmodel/my_model_best_0.0007_fea_importance.json'
+#fea_config_path = './recmodel/my_model_best_0.0007_fea_importance.json'
 with open(config_path,'w') as file_obj:
     json.dump(config,file_obj)
 file_obj.close()

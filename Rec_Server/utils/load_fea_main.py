@@ -32,18 +32,18 @@ def Merge(dict1, dict2):
 
 def loadalldata(redis_curse, user_list, item_list):
 
-    user_df = get_data_redis(redis_curse['user'], user_list, 'user_id')
+    user_df = get_data_redis(redis_curse['user'], user_list, 'USER_ID')
     
-    item_df = get_data_redis(redis_curse['item'], item_list, 'item_id')
+    item_df = get_data_redis(redis_curse['item'], item_list, 'ITEM_ID')
     
     interact_id = makeinteraction_id(user_list, item_list)
     interation_df = get_interaction_redis(redis_curse['interaction'], interact_id)
     
     
-    pred_df = left_joinFunc(interation_df, user_df, 'user_id')
-    pred_df = left_joinFunc(pred_df, item_df, 'item_id')
+    pred_df = left_joinFunc(interation_df, user_df, 'USER_ID')
+    pred_df = left_joinFunc(pred_df, item_df, 'ITEM_ID')
     
-    pred_df[['user_id', 'item_id']] = pred_df[['user_id', 'item_id']].astype('str')
+    pred_df[['USER_ID', 'ITEM_ID']] = pred_df[['USER_ID', 'ITEM_ID']].astype('str')
     
 #    colname1 = 'item_id'
 #    colname2 = 'item_create_time'
@@ -66,9 +66,8 @@ if __name__ == "__main__":
     
     redis_curse = build_redis_connect()
     
-    sample = {"user_list":["20200326092704","20200326091413","20200326092046","20200326092191","20200326093210","20200326094712","20200326096604","20200326096737","20200326098290","20200326095767"],  "item_list":["BTC","TRX","TUSD","BTT","DAI","BNB","TEL","SNX","DCR","LTC","DOT","SNT","XLM","DEGO","ETC","ETH","KNC","VET","DRGN","SOLVE","ROOBEE","AION","CRPT","RBTC","AERGO","TRTL","IOTX","OPEN","VIDT","TOKO","KICK","UTK","KAT" ]}
-    
-    itemid_list = sample['item_list']
+    sample = {"user_list":["60b4cdc47789d200098dc87d", "60b4cc777789d200098dc879"],  "item_list":["BTC","TRX","TUSD","BTT","DAI","BNB","TEL","SNX","DCR","LTC","DOT","SNT","XLM","DEGO","ETC","ETH","KNC","VET","DRGN","SOLVE","ROOBEE","AION","CRPT","RBTC","AERGO","TRTL","IOTX","OPEN","VIDT","TOKO","KICK","UTK","KAT" ]}
+    item_list = sample['item_list']
     user_list = sample['user_list']
     
-    pred_data = loadalldata(redis_curse, user_list, itemid_list)
+    pred_data = loadalldata(redis_curse, user_list, item_list)

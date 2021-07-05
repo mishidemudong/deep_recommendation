@@ -20,8 +20,8 @@ def makeinteraction_id(user_list, itemid_list):
 
 def get_interaction_data(user_id, itemid_list):
     interaction_df = pd.DataFrame()
-    interaction_df['user_id'] = [user_id]*len(itemid_list)
-    interaction_df['item_id'] = itemid_list
+    interaction_df['USER_ID'] = [user_id]*len(itemid_list)
+    interaction_df['ITEM_ID'] = itemid_list
     
     return interaction_df
 
@@ -48,8 +48,8 @@ def get_interaction_redis(curse_redis, id_list):
     for item in id_list:
         user_id.append(item.split('_')[0])
         item_id.append(item.split('_')[1])
-    result_df['user_id'] = user_id
-    result_df['item_id'] = item_id
+    result_df['USER_ID'] = user_id
+    result_df['ITEM_ID'] = item_id
     
     return result_df
 
@@ -61,23 +61,23 @@ if __name__ == "__main__":
     redis_curse = redis.Redis(connection_pool=pool)
     
     
-    sample = {"user_list":["20200326092704"],  "item_list":["BTC","TRX" ]}
+    sample = {"user_list":['60b4cdc47789d200098dc87d', '60b4cc777789d200098dc879'],  "item_list":["BTC","TRX" ]}
     
     itemid_list = sample['item_list']
     user_list = sample['user_list']
     
     
-#    id_list = makeinteraction_id(user_list, itemid_list)
+    id_list = makeinteraction_id(user_list, itemid_list)
     
-    id_list = ['20200326097953_TEST-BOT-ID 6',
- '20200326093938_TEST-BOT-ID 10',
- '20200326098480_TEST-BOT-ID 2',
- '20200326104105_TEST-BOT-ID 5',
- '20200326096592_TEST-BOT-ID 7',
- '20200326093873_TEST-BOT-ID 9',
- '20200326091914_TEST-BOT-ID 3',
- '20200326097180_TEST-BOT-ID 1',
- '20200326098542_OCEAN',
- '20200326099149_3']
+#    id_list = ['20200326097953_TEST-BOT-ID 6',
+# '20200326093938_TEST-BOT-ID 10',
+# '20200326098480_TEST-BOT-ID 2',
+# '20200326104105_TEST-BOT-ID 5',
+# '20200326096592_TEST-BOT-ID 7',
+# '20200326093873_TEST-BOT-ID 9',
+# '20200326091914_TEST-BOT-ID 3',
+# '20200326097180_TEST-BOT-ID 1',
+# '20200326098542_OCEAN',
+# '20200326099149_3']
     
     df = get_interaction_redis(redis_curse, id_list)

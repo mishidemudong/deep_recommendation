@@ -397,41 +397,41 @@ if __name__ == "__main__":
     
 
 
-#    best_run, best_model, space = optim.minimize(model=create_model,
-#                                          data=makedata,
-#                                          algo=tpe.suggest,
-#                                          max_evals=5,
-#                                          trials=Trials(),
-#                                          return_space=True)
-###    
-#    X_train, Y_train, X_test, Y_test = makedata()
-###
-###    
-#    print("Evalutation of best performing model:")
-#    print(best_model.evaluate(X_test, Y_test))
-#    print("Best performing model chosen hyper-parameters:")
-#    print(best_run)
-#    
-#    modelpath = './WDLModel'
-#    filename='{}/best_hyperparams.json'.format(modelpath)
-#    
-#    high_name  = file_name('./WDLModel', '.json')
-#    
-#    if task == 'binary':
-#        config = json.load(open(sorted(high_name)[-1],'r'))
-#    elif task == 'regression':
-#        config = json.load(open(sorted(high_name)[0],'r'))
-#    
-#    best_config = config
-#    for key,value in best_run.items():
-#        if key in best_config['all_params'].keys():
-#            print(key)
-#            print(best_config['all_params'][key])
-#            best_config['all_params'][key] = best_config['all_params'][key][value]
-#        
-#        
-#    with open(filename,'w') as file_obj:
-#        json.dump(best_config,file_obj)
+    best_run, best_model, space = optim.minimize(model=create_model,
+                                          data=makedata,
+                                          algo=tpe.suggest,
+                                          max_evals=5,
+                                          trials=Trials(),
+                                          return_space=True)
+##    
+    X_train, Y_train, X_test, Y_test = makedata()
+##
+##    
+    print("Evalutation of best performing model:")
+    print(best_model.evaluate(X_test, Y_test))
+    print("Best performing model chosen hyper-parameters:")
+    print(best_run)
+    
+    modelpath = './WDLModel'
+    filename='{}/best_hyperparams.json'.format(modelpath)
+    
+    high_name  = file_name('./WDLModel', '.json')
+    
+    if task == 'binary':
+        config = json.load(open(sorted(high_name)[-1],'r'))
+    elif task == 'regression':
+        config = json.load(open(sorted(high_name)[0],'r'))
+    
+    best_config = config
+    for key,value in best_run.items():
+        if key in best_config['all_params'].keys():
+            print(key)
+            print(best_config['all_params'][key])
+            best_config['all_params'][key] = best_config['all_params'][key][value]
+        
+        
+    with open(filename,'w') as file_obj:
+        json.dump(best_config,file_obj)
 #        
     '''
     [0.552747669549783, 0.52751887, 0.7616]
