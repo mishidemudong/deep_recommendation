@@ -55,24 +55,32 @@ def rec_score_func():
     itemid_list = list(set(sample['item_list']))
     user_list = list(set(sample['user_list']))
     
-    user_list1, user_list2 = split(user_list, True, 0.5)
+#    user_list1, user_list2 = split(user_list, True, 0.5)
     
     
     #2 load user_data, item_data, interaction_data
     #  or load user_fea, item_data, interaction_fea
-    pred_data1 = loadalldata(redis_curse, user_list1, itemid_list)
-    pred_data2 = loadalldata(redis_curse, user_list2, itemid_list)
     
-    print(pred_data1.columns)
+    pred_data = loadalldata(redis_curse, user_list, itemid_list)
+#    pred_data1 = loadalldata(redis_curse, user_list1, itemid_list)
+#    pred_data2 = loadalldata(redis_curse, user_list2, itemid_list)
+    
+    print(pred_data.columns)
+    print(pred_data.shape)
+    
+    response, item_tag_importance = rec_model.predict2(user_list, pred_data)
+    
+    
+    
     
     #3predict
-    response1, item_tag_importance = rec_model.predict2(user_list1, pred_data1)
-#    response = rec_model.predict_test(pred_data)
-    
-    response2, item_tag_importance = rec_model.predict2(user_list2, pred_data2)
-    
-    
-    response = response1 + response2
+#    response1, item_tag_importance = rec_model.predict2(user_list1, pred_data1)
+##    response = rec_model.predict_test(pred_data)
+#    
+#    response2, item_tag_importance = rec_model.predict2(user_list2, pred_data2)
+#    
+#    
+#    response = response1 + response2
 
 
     if response: 

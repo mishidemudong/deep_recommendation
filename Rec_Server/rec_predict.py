@@ -105,13 +105,13 @@ class RecPredictHandler():
                 for user_id in user_list:
                     result = {}
                     result['user_id'] = user_id
-                    data = pred_data[pred_data['user_id'] == user_id]
+                    data = pred_data[pred_data['USER_ID'] == user_id]
                     test_model_input = self.preprocess(data)
 #                    print(len(test_model_input))
                     pred = self.model.predict(test_model_input, batch_size=256)
 #                    print(pred)
 #                    result['item_score_list'] = {it_id:str(score[0]) for it_id, score in zip(pred_data['item_id'], pred)}
-                    result['item_score_list'] = [(it_id,str(score[0])) for it_id, score in zip(pred_data['item_id'], pred)]
+                    result['item_score_list'] = [(it_id,str(score[0])) for it_id, score in zip(pred_data['ITEM_ID'], pred)]
                     result['model_type'] = self.config['model_type']
                     res.append(result)
                 
@@ -130,24 +130,24 @@ class RecPredictHandler():
             with self.session.as_default():
                 for user_id in user_list:
                     result = {}
-                    result['user_id'] = user_id
-                    data = pred_data[pred_data['user_id'] == user_id]
+                    result['USER_ID'] = user_id
+                    data = pred_data[pred_data['USER_ID'] == user_id] 
                     test_model_input = self.preprocess(data)
                     #                    print(len(test_model_input))
                     pred = self.model.predict(test_model_input, batch_size=256)
                     #                    print(pred)
                     #                    result['item_score_list'] = {it_id:str(score[0]) for it_id, score in zip(pred_data['item_id'], pred)}
-                    # print("ITEM_CATEGORY", pred_data['ITEM_CATEGORY'])
-                    result['item_score_list'] = [(it_id, str(score[0]), category) for it_id, score, category in
-                                                 zip(pred_data['item_id'], pred, pred_data['ITEM_CATEGORY'])]
-                    result['model_type'] = self.config['model_type']
+                    print("ITEM_CATEGORY", pred_data['ITEM_CATEGORY'])
+                    result['ITEM_SCORE_LIST'] = sorted([(it_id, str(score[0]), category) for it_id, score, category in
+                                                 zip(pred_data['ITEM_ID'], pred, pred_data['ITEM_CATEGORY'])], key=lambda x:x[1], reverse=True )
+                    result['MODEL_TYPE'] = self.config['model_type']
                     res.append(result)
 
         return res, self.config['fea_importance']
 
     def predict_test(self, pred_data):
-        res = {'user_id': pred_data['user_id'][0]}
-        res['result'] = [(it_id, random.random()) for it_id in pred_data['item_id']]
+        res = {'USER_ID': pred_data['USER_ID'][0]}
+        res['result'] = [(it_id, random.random()) for it_id in pred_data['ITEM_ID']]
 
         return res
 
