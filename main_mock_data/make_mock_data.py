@@ -205,7 +205,7 @@ for label,value in tqdm(interaction_fea_map.items()):
         target = list(target_name.keys())
         array = [random.choice(target) for _ in range(all_num)]
         interation_df[label] = array
-        
+
 a1=(2021,5,1,0,0,1,0,0,0)        #设置开始日期时间元组（2021-05-01 00：00：00）
 a2=(2021,6,30,23,59,59,0,0,0)    #设置结束日期时间元组（2021-12-31 23：59：59）
 interation_df['interaction_create_time'.upper()] = make_random_time(all_num, a1, a2, False)
