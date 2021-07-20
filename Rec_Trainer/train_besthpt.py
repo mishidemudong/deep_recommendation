@@ -6,7 +6,7 @@ Created on Mon May 17 18:11:24 2021
 @author: liang
 """
 import os
-#os.environ['TF_KERAS'] = '1'  # 必须使用tf.keras
+os.environ['TF_KERAS'] = '1'  # 必须使用tf.keras
 
 import tensorflow as tf
 
@@ -19,11 +19,11 @@ from deepctr.models import DeepFM, WDL, xDeepFM
 from deepctr.feature_column import SparseFeat, DenseFeat, get_feature_names
 import pickle
 
-from tensorflow.keras.optimizers import Adam
+#from tensorflow.keras.optimizers import Adam
 
-#from bert4keras.optimizers import Adam
-#from bert4keras.optimizers import extend_with_weight_decay
-#from bert4keras.optimizers import extend_with_gradient_accumulation
+from bert4keras.optimizers import Adam
+from bert4keras.optimizers import extend_with_weight_decay
+from bert4keras.optimizers import extend_with_gradient_accumulation
 import json
 
 
@@ -138,43 +138,43 @@ if __name__ == '__main__':
     
     
     fea_model = pickle.load(open(config['fea_model_savepath'], 'rb')) 
-#    train_data_savepath = './data/train_test_split.pkl'
-#    split_data = pickle.load(open(train_data_savepath, 'rb'))
-#    x_train, y_train, x_test, y_test = split_data['x_train'], split_data['y_train'], split_data['x_test'], split_data['y_test']
-#    
-#    bushu_keys = ['model_type','all_params','fea_model_savepath', 'task']
-#    
-#    best_config = {}
-#    for key in bushu_keys:
-#        if key in config.keys():
-#            best_config[key] = config[key]
-#    best_config['best_model_path'] = './recmodel'
-#    model = buildmodel(best_config)
-##    
-#    print("===================================")
-#    print(config)
-#    if best_config['task'] == 'binary':
-#        evaluator = EvaluatorB(best_config)
-#    elif best_config['task'] == 'regression':
-#        evaluator = EvaluatorRe(best_config)
-#    
-#    save_dir = './tensorboard'
-#    tensorboard_callback = tf.keras.callbacks.TensorBoard(
-#        log_dir=os.path.join(save_dir, 'tf_logs'), histogram_freq=0, write_graph=False,
-#        write_grads=False, update_freq=320)
-#    
+    train_data_savepath = './data/train_test_split.pkl'
+    split_data = pickle.load(open(train_data_savepath, 'rb'))
+    x_train, y_train, x_test, y_test = split_data['x_train'], split_data['y_train'], split_data['x_test'], split_data['y_test']
     
-#    AdamW = extend_with_weight_decay(Adam, 'AdamW')
-#    AdamWG = extend_with_gradient_accumulation(AdamW, 'AdamWG')
-#    
-#    optimizer = AdamWG(
-#        lr=config['all_params']['lrate'],
-#        weight_decay_rate=0.01,
-#        exclude_from_weight_decay=['Norm', 'bias'],
-##        grad_accum_steps=128
-#    )
+    bushu_keys = ['model_type','all_params','fea_model_savepath', 'task']
     
-    optimizer = Adam(best_config['all_params']['lrate'])
+    best_config = {}
+    for key in bushu_keys:
+        if key in config.keys():
+            best_config[key] = config[key]
+    best_config['best_model_path'] = './recmodel'
+    model = buildmodel(best_config)
+#    
+    print("===================================")
+    print(config)
+    if best_config['task'] == 'binary':
+        evaluator = EvaluatorB(best_config)
+    elif best_config['task'] == 'regression':
+        evaluator = EvaluatorRe(best_config)
+    
+    save_dir = './tensorboard'
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(
+        log_dir=os.path.join(save_dir, 'tf_logs'), histogram_freq=0, write_graph=False,
+        write_grads=False, update_freq=320)
+    
+    
+    AdamW = extend_with_weight_decay(Adam, 'AdamW')
+    AdamWG = extend_with_gradient_accumulation(AdamW, 'AdamWG')
+    
+    optimizer = AdamWG(
+        lr=config['all_params']['lrate'],
+        weight_decay_rate=0.01,
+        exclude_from_weight_decay=['Norm', 'bias'],
+#        grad_accum_steps=128
+    )
+    
+#    optimizer = Adam(best_config['all_params']['lrate'])
 
     if config['task'] == 'binary':
         model.compile(optimizer, "binary_crossentropy",

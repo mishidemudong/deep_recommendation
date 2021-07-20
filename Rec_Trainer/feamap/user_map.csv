@@ -1,0 +1,15 @@
+label_code,label_name,data_type,数据来源,说明
+test_user,测试用户,string_type,大数据Edmond生产,标记是/否
+user_id,用户长id,string,大数据Edmond生产,原始数据
+uid,用户短id,string,大数据Edmond生产,原始数据
+kyc_level,KYC等级,string_type,大数据Edmond生产,国家枚举值
+kyc_region,KYC国家,string_type,大数据Edmond生产,日期时间格式
+register_date,注册时间,float,大数据Edmond生产,"1.以usdt为单位,按当前的市价换算 
+2.合约账户按资产权益计算 
+3.杠杆账户按照持仓计算 
+4.按日平均"
+last_30_avg_balance_usdt,30天持仓均值,float,大数据Edmond生产,合计
+last_30_fee_usdt,30天手续费收入,int,大数据Edmond生产,用户最后一次发生交易的时间距离现在的时间间隔
+last_trade_interval,最后一次交易时间间隔,int,大数据Edmond生产,合计
+last_60_trade_cnt,60天内交易次数,int,大数据Edmond生产,"以usdt为单位,按当前的市价计算合计"
+last_60_trade_funds_usdt,60天内交易金额,float,,

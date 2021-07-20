@@ -31,7 +31,7 @@ sess = tf.compat.v1.Session(config=config)
 
 
 print("loading model...")
-config_path = './recmodel/my_model_best_0.0142.json'
+config_path = './recmodel/my_model_best_0.0019.json'
 rec_model = RecPredictHandler(config_path)
 print("load REC model success !")
 

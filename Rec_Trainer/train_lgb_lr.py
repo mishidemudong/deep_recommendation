@@ -65,10 +65,10 @@ config_path = '{}/best_hyperparams.json'.format(modelpath)
 
 config = json.load(open(config_path, 'r'))
 
-fea_config = pickle.load(open('/media/liang/Project2/推荐系统/git_code/deep_recommendation/fea_config.pkl', 'rb'))
+fea_config = pickle.load(open('./featuremodel/fea_config.pkl', 'rb'))
 target = [fea_config['map_eng_name'][fea_config['target'][0]]]
 target_name = fea_config['target_name']
-train_data_path = '/media/liang/Project2/推荐系统/git_code/deep_recommendation/data/train_eng_fea.csv'
+train_data_path = './data/train_eng_fea.csv'
 data = pd.read_csv(train_data_path)  # .sample(frac=0.1, replace=False, random_state=5, axis=0)
 
 data[target] = [target_name[item[0]][1] for item in list(data[target].values)]
@@ -84,7 +84,7 @@ for feat in fea_model['sparse_features']:
     lbe.classes_ = np.append(lbe.classes_, '<unknow>')
     sparse_fea[feat] = lbe
 
-time_fea = ["interaction_create_time".upper(), "user_create_time".upper(), "item_create_time".upper()]
+time_fea = ["INTERACTION_CREATE_TIME", "USER_CREATE_TIME", "ITEM_CREATE_TIME"]
 
 for fea in time_fea:
     data[fea] = data[fea].map(lambda x: time2stamp(x))
@@ -93,16 +93,6 @@ mms = MinMaxScaler(feature_range=(0, 1))
 data[fea_model['dense_features']] = mms.fit_transform(data[fea_model['dense_features']])
 train, test = train_test_split(data, test_size=0.2, random_state=2020)
 
-# load or create your dataset
-# modelpath = './WDLModel'
-# config_path='{}/best_hyperparams.json'.format(modelpath)
-# config = json.load(open(config_path,'r'))
-# fea_model = pickle.load(open(config['fea_model_savepath'], 'rb'))
-# train_data_savepath = './data/train_test_split.pkl'
-# split_data = pickle.load(open(train_data_savepath, 'rb'))
-# X_train, y_train, X_test, y_test = split_data['x_train'], split_data['y_train'], split_data['x_test'], split_data['y_test']
-# y_train = [item[0] for item in y_train]
-# y_test = [item[0] for item in y_test]
 y_train = train[target]  # training label
 y_test = test[target]  # testing label
 X_train = train.drop(target, axis=1)  # training dataset
@@ -149,11 +139,8 @@ print('Save model...')
 gbm.save_model('model.txt')
 
 print('Calculate feature importances...')
-# feature importances
-# print('Feature importances:', list(gbm.feature_importance()))
-# print('Feature importances:', list(gbm.feature_importance("gain")))
 
-lgb.plot_importance(gbm, max_num_features=30, importance_type='split')
+
 importance = pd.DataFrame()
 importance['Feature'] = X_train.columns.values
 importance['ImportanceWeight'] = gbm.feature_importance(importance_type='split')
@@ -182,42 +169,11 @@ for index, item in importance.iterrows():
         fea_importance['Plate'].append(item['Feature'])
 
 
-config_path = './recmodel/my_model_best_0.0142.json'
+config_path = './recmodel/my_model_best_0.0025.json'
 config = json.load(open(config_path,'r'))
 config['fea_importance'] = fea_importance
 
-#fea_config_path = './recmodel/my_model_best_0.0007_fea_importance.json'
 with open(config_path,'w') as file_obj:
     json.dump(config,file_obj)
 file_obj.close()
 
-
-
-def predict():
-    print('Start predicting...')
-    y_pred = gbm.predict(X_train, pred_leaf=True)
-
-    #     feature transformation and write result
-    print('Writing transformed training data')
-    transformed_training_matrix = np.zeros([len(y_pred), len(y_pred[0]) * num_leaves], dtype=np.int64)
-    for i in range(0, len(y_pred)):
-        temp = np.arange(len(y_pred[0])) * num_leaves - 1 + np.array(y_pred[i])
-        transformed_training_matrix[i][temp] += 1
-
-    for i in range(0, len(y_pred)):
-        for j in range(0, len(y_pred[i])):
-            transformed_training_matrix[i][j * num_leaves + y_pred[i][j] - 1] = 1
-
-    #     predict and get data on leaves, testing data
-    y_pred = gbm.predict(X_test, pred_leaf=True)
-
-    #     feature transformation and write result
-    print('Writing transformed testing data')
-    transformed_testing_matrix = np.zeros([len(y_pred), len(y_pred[0]) * num_leaves], dtype=np.int64)
-    for i in range(0, len(y_pred)):
-        temp = np.arange(len(y_pred[0])) * num_leaves - 1 + np.array(y_pred[i])
-        transformed_testing_matrix[i][temp] += 1
-
-    for i in range(0, len(y_pred)):
-        for j in range(0, len(y_pred[i])):
-            transformed_testing_matrix[i][j * num_leaves + y_pred[i][j] - 1] = 1

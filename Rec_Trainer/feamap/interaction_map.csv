@@ -1,0 +1,10 @@
+﻿label_name,label_code,label_source,data_type,说明,确定有数据
+用户ID,user_id,big_data,string,默认用户短ID,有
+物品ID,item_id,big_data,string,通过事件类型、item_type1和item_type2共同确定,有
+交互类型,interaction_type,big_data,string_type,曝光（负样本）、点击、关注、购买、评论,有
+交互时间,interaction_time,big_data,date,通用字段中的事件创建时间为交互发生时间戳,有
+物品所在顺序,item_order_index,big_data,int06,物品所在推荐列表上次顺序（从初始状态开始，绝对位置）,有
+历史点击次数,click_times,big_data,int50,统计sum(所有的交互时间之前发生的点击事件次数),etl
+历史购买次数,purchase_times,big_data,int20,统计sum(所有的交互时间之前发生的购买事件次数),etl
+历史交互记录,history_interaction_list,big_data,list,聚合所有历史的操作交互行为序列,etl
+item的推荐识别码,uuid,big_data,string,关联ID用,有
